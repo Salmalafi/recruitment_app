@@ -44,7 +44,7 @@ const OffersList = ({ offers }) => {
           onChange={handleContractFilterChange}
           className="border border-buttonColor2 p-2 rounded-full mr-2"
         >
-          <option value="all">All Contracts</option>
+          <option value="Tous">Tous Types</option>
           <option value="CDI">CDI</option>
           <option value="CDD">CDD</option>
           <option value="stage">Stage</option>
@@ -56,7 +56,7 @@ const OffersList = ({ offers }) => {
           onChange={handletypecontrat}
           className="border border-buttonColor2 p-2 rounded-full"
         >
-          <option value="all">All Types</option>
+          <option value="Tous">Touts Rythmes </option>
           <option value="Temps plein">Temps plein</option>
           <option value="Temps partiel">Temps partiel</option>
           <option value="Stage">Stage</option>

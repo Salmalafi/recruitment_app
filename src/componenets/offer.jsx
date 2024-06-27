@@ -4,7 +4,7 @@ import { MapPin, Briefcase, FileText, Calendar } from 'lucide-react';
 
 const Offer = ({ reference, title, contractType, location, description, maxDate, expired }) => {
   return (
-    <div className={`bg-customBlue rounded-xl shadow-xl p-6 mb-4 ${expired ? 'opacity-50' : 'hover:bg-hoverColor'}`}>
+    <div className={`bg-customBlue rounded-xl shadow-xl p-6 mb-4 ${expired ? 'opacity-50' : 'hover:bg-hoverColor hover:animate-zoomin'}`}>
       <div className="w-full">
         <h2 className="text-xl font-bold mb-2 flex items-center">
           <Briefcase size={18} className="mr-2" /> {title}
