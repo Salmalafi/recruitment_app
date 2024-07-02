@@ -13,6 +13,7 @@ import Footer from './componenets/footer';
 import OffersList from './componenets/offersList';
 import Equipe from './pages/Equipe';
 import About from './pages/About';
+import SignInWithLinkedIn from './componenets/singinwithLinkedin';
 
 const App = () => {
   const currentDate = new Date();
@@ -82,6 +83,7 @@ const App = () => {
                 <OffersList offers={offersWithExpiry} />
               </>
             } />
+              <Route path="/signinwithlinkedin" element={<SignInWithLinkedIn/>} />
             <Route path="/equipe" element={<Equipe />} />
             <Route path="/about" element={<About />} />
             <Route path="/signup" element={<SignUp />} />
