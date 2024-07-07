@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Offer from './offer';
+import FilterButton from '../componenets/DropdownFilter';
+import axios from 'axios';
 
-
-const OffersList = ({ offers }) => {
+const OffersList = () => {
+  const [offers, setOffers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [contractFilter, setContractFilter] = useState('all');
   const [typeContrat, setTypeContrat] = useState('all');
+
+  useEffect(() => {
+    const fetchOffers = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/offers');
+        setOffers(response.data);
+      } catch (error) {
+        console.error('Error fetching offers:', error);
+      }
+    };
+    fetchOffers();
+  }, []);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -19,7 +33,6 @@ const OffersList = ({ offers }) => {
     setTypeContrat(event.target.value);
   };
 
-  // Filter logic for offers based on search term and filter selection
   const filteredOffers = offers.filter((offer) => {
     const titleMatches = offer.title.toLowerCase().includes(searchTerm.toLowerCase());
     const contractFilterMatches = contractFilter === 'all' || offer.contractType === contractFilter;
@@ -29,42 +42,18 @@ const OffersList = ({ offers }) => {
 
   return (
     <div className="container mx-auto">
-      {/* Center-aligned search box and filter */}
-      <div className="my-4 flex justify-center items-center mt-6 ">
+      <div className="my-4 flex justify-center items-center mt-6">
         <input
           type="text"
-          placeholder="Rechercher par titre de poste..."
+          placeholder="Rechercher par titre de poste ou référence..."
           value={searchTerm}
           onChange={handleSearchChange}
-          className="border border-buttonColor2 p-2 rounded-full mr-2 " style={{ width: '350px' }}
-        />
-        {/* Contract Type Filter */}
-        <select
-          value={contractFilter}
-          onChange={handleContractFilterChange}
           className="border border-buttonColor2 p-2 rounded-full mr-2"
-        >
-          <option value="Tous">Tous Types</option>
-          <option value="CDI">CDI</option>
-          <option value="CDD">CDD</option>
-          <option value="stage">Stage</option>
-          <option value="Alternance">Alternance</option>
-        </select>
-         {/* Type Contrat Filter */}
-        <select
-          value={typeContrat}
-          onChange={handletypecontrat}
-          className="border border-buttonColor2 p-2 rounded-full"
-        >
-          <option value="Tous">Touts Rythmes </option>
-          <option value="Temps plein">Temps plein</option>
-          <option value="Temps partiel">Temps partiel</option>
-          <option value="Stage">Stage</option>
-          {/* Add more options for other filter criteria */}
-        </select>
+          style={{ width: '500px' }}
+        />
+        <FilterButton />
       </div>
-      
-      {/* List of filtered offers */}
+
       <div className="grid grid-cols-1 p-8 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredOffers.map((offer) => (
           <Offer
@@ -73,9 +62,12 @@ const OffersList = ({ offers }) => {
             title={offer.title}
             contractType={offer.contractType}
             location={offer.location}
-            description={offer.description}
-            MaxDate={offer.MaxDate}
-            expired={offer.expired}
+            description={offer.jobDescription}
+            maxDate={offer.maxDate}
+            expired={new Date(offer.maxDate) < new Date()}
+            jobDescription={offer.jobDescription}
+            profilCherche={offer.profilCherche}
+            whatWeOffer={offer.whatWeOffer}
           />
         ))}
       </div>
@@ -84,5 +76,8 @@ const OffersList = ({ offers }) => {
 };
 
 export default OffersList;
+
+
+
 
 

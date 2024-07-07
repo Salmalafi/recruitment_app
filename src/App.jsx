@@ -1,11 +1,10 @@
 // src/App.jsx
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
-
-
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, useLocation, Routes } from 'react-router-dom';
+import './css/style.css';
+import './charts/ChartjsConfig';
 import recrutementImage from './assets/recrutement2.jpg';
-
+import Dashboard from './pages/Dashboard';
 import SignUp from './pages/signup';
 import Login from './pages/login';
 import Navbar from './componenets/navbar';
@@ -18,6 +17,11 @@ import SignInWithLinkedIn from './componenets/singinwithLinkedin';
 const App = () => {
   const currentDate = new Date();
 
+  useEffect(() => {
+    document.querySelector('html').style.scrollBehavior = 'auto';
+    window.scroll({ top: 0 });
+    document.querySelector('html').style.scrollBehavior = '';
+  }, [location.pathname]); 
   const offers = [
     {
       reference: 'REF001',
@@ -64,11 +68,15 @@ const App = () => {
   return (
     <Router>
       <div className="app">
-        <Navbar></Navbar>
-        <main className="main-content container mx-auto mt-16"> 
-          <Routes>
-            <Route path="/" element={
-              <>
+        <Routes>
+        
+          <Route path="/dashboard" element={<Dashboard />} />
+
+     
+          <Route path="/" element={
+            <>
+              <Navbar /> 
+              <main className="main-content container mx-auto mt-16">
                 <div className="relative">
                   <img src={recrutementImage} alt="Recrutement" className="w-full object-cover shadow-md" style={{ height: '350px' }} />
                   <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center bg-black bg-opacity-50 rounded-lg">
@@ -76,21 +84,28 @@ const App = () => {
                     <p className="text-lg mb-8">Découvrez nos offres d'emploi disponibles dès maintenant</p>
                     <div className="space-x-4">
                       <button className="bg-buttonColor3 hover:bg-blue-600 text-white px-6 py-3 rounded-lg">Explorer les offres</button>
-                      <button className="bg-buttonColor4 hover:bg-gray-900 text-white px-6 py-3 rounded-lg">Candidature spontannée</button>
+                      <button className="bg-buttonColor4 hover:bg-gray-900 text-white px-6 py-3 rounded-lg">Candidature spontanée</button>
                     </div>
                   </div>
                 </div>
                 <OffersList offers={offersWithExpiry} />
-              </>
-            } />
-              <Route path="/signinwithlinkedin" element={<SignInWithLinkedIn/>} />
-            <Route path="/equipe" element={<Equipe />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </main>
-    <Footer></Footer>
+              </main>
+              <Footer />
+            </>
+          } />
+
+          <Route path="/signinwithlinkedin" element={<SignInWithLinkedIn />} />
+          <Route path="/equipe" element={<Equipe />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={
+            <>
+              <Navbar />
+              <Login />
+              <Footer />
+            </>
+          } />
+        </Routes>
       </div>
     </Router>
   );
