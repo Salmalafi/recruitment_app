@@ -13,6 +13,12 @@ import OffersList from './componenets/offersList';
 import Equipe from './pages/Equipe';
 import About from './pages/About';
 import SignInWithLinkedIn from './componenets/singinwithLinkedin';
+import MyApplications from './componenets/MyApplications';
+import * as PDFJS from 'pdfjs-dist'
+import 'pdfjs-dist/web/pdf_viewer.css';
+import ForgotPasswordStepper from './componenets/ForgotPasswordStepper';
+PDFJS.GlobalWorkerOptions.workerSrc ='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
 
 const App = () => {
   const currentDate = new Date();
@@ -70,9 +76,8 @@ const App = () => {
       <div className="app">
         <Routes>
         
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/*" element={<Dashboard />} />
 
-     
           <Route path="/" element={
             <>
               <Navbar /> 
@@ -98,6 +103,18 @@ const App = () => {
           <Route path="/equipe" element={<Equipe />} />
           <Route path="/about" element={<About />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/resetpassword" element={<>
+            <Navbar />
+            <ForgotPasswordStepper />
+            <Footer />
+            </>
+            } />
+                 <Route path="/reset-password/*" element={<>
+            <Navbar />
+            <ForgotPasswordStepper />
+            <Footer />
+            </>
+            } /> 
           <Route path="/login" element={
             <>
               <Navbar />

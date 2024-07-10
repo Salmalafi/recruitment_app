@@ -1,12 +1,46 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import SuccessAlert from './SuccessAlert';
 
-const Apply = ({ show, onClose }) => {
+const Apply = ({ show, onClose, userId, offerId }) => {
   const [files, setFiles] = useState([]);
   const [fileError, setFileError] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const maxFiles = 2;
 
+  const handleUpload = () => {
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('resume', file); // Ensure 'resume' matches the field name expected by the backend
+    });
+  
+    if (userId && offerId) {
+      formData.append('userId', userId.toString());
+      formData.append('offerId', offerId.toString());
+      formData.append('date', new Date().toISOString()); 
+      formData.append('status', 'PENDING'); 
+    } else {
+      console.error('userId or offerId is null or undefined');
+      // Handle this error condition appropriately
+    }
+    
+    const token = localStorage.getItem('token');
+  
+    axios.post('http://localhost:3000/applications', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => {
+      console.log('Application submitted successfully:', response.data);
+      setShowSuccess(true);
+    })
+    .catch(error => {
+      console.error('Error submitting application:', error);
+    });
+  };
+  
   const handleFileChange = (event) => {
     const fileList = event.target.files;
     if (fileList.length + files.length > maxFiles) {
@@ -25,25 +59,6 @@ const Apply = ({ show, onClose }) => {
   const handleClose = () => {
     handleClearFiles();
     onClose();
-  };
-
-  const handleUpload = () => {
-    const updatedFiles = files.map(file => ({
-      ...file,
-      status: 'Uploading...',
-    }));
-
-    setFiles(updatedFiles);
-
-    setTimeout(() => {
-      const uploadedFiles = updatedFiles.map(file => ({
-        ...file,
-        status: 'Uploaded',
-      }));
-
-      setFiles(uploadedFiles);
-      setShowSuccess(true);
-    }, 3000);
   };
 
   const handleSuccessAlertClose = () => {

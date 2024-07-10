@@ -84,7 +84,7 @@ const SignUp = () => {
                 Continue with Google
               </button>
               <button type="button"
-                className="w-full px-6 py-3 flex items-center justify-center rounded-md text-white text-sm tracking-wider font-semibold border-none outline-none bg-buttonColor4 hover:bg-[#333]">
+                className="w-full px-6 py-3 flex items-center justify-center rounded-md text-white text-sm tracking-wider font-semibold border-none outline-none bg-purple hover:bg-[#333]">
                <svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
     <title>Linkedin</title>
     <g id="Icon/Social/linkedin-color" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
@@ -166,7 +166,7 @@ const SignUp = () => {
 
             <button
               type="submit"
-              className="w-full py-3 mt-6 font-medium tracking-wider text-white uppercase bg-buttonColor4 rounded-md focus:outline-none hover:bg-[#333]">
+              className="w-full py-3 mt-6 font-medium tracking-wider text-white uppercase bg-purple rounded-md focus:outline-none hover:bg-[#333]">
               Sign Up
             </button>
           </form>

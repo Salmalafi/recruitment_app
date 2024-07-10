@@ -22,14 +22,19 @@ const OffersList = () => {
   }, []);
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
+    // Normalize the search term by removing accents
+    const normalizedSearchTerm = event.target.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    
+    // Update the state with the normalized search term
+    setSearchTerm(normalizedSearchTerm.toLowerCase());
   };
+  
 
   const handleContractFilterChange = (event) => {
     setContractFilter(event.target.value);
   };
 
-  const handletypecontrat = (event) => {
+  const handleTypeContratChange = (event) => {
     setTypeContrat(event.target.value);
   };
 
@@ -47,7 +52,7 @@ const OffersList = () => {
           type="text"
           placeholder="Rechercher par titre de poste ou référence..."
           value={searchTerm}
-          onChange={handleSearchChange}
+          onChange={handleSearchChange} // Bind handleSearchChange to onChange event
           className="border border-buttonColor2 p-2 rounded-full mr-2"
           style={{ width: '500px' }}
         />
@@ -57,7 +62,7 @@ const OffersList = () => {
       <div className="grid grid-cols-1 p-8 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredOffers.map((offer) => (
           <Offer
-            key={offer.reference}
+            key={offer._id} // Ensure each Offer component has a unique key
             reference={offer.reference}
             title={offer.title}
             contractType={offer.contractType}
@@ -68,6 +73,9 @@ const OffersList = () => {
             jobDescription={offer.jobDescription}
             profilCherche={offer.profilCherche}
             whatWeOffer={offer.whatWeOffer}
+            skillsRequired={offer.skillsRequired}
+            experience={offer.experience}
+            _id={offer._id} // Pass _id as a prop to Offer component
           />
         ))}
       </div>
@@ -76,7 +84,6 @@ const OffersList = () => {
 };
 
 export default OffersList;
-
 
 
 

@@ -11,6 +11,8 @@ const OfferDetails = ({ offer, onClose }) => {
     jobDescription,
     profilCherche,
     whatWeOffer,
+    skillsRequired,
+    experience
   } = offer;
 
   return (
@@ -52,7 +54,33 @@ const OfferDetails = ({ offer, onClose }) => {
         <div className="text-gray-700 mb-4">{jobDescription}</div>
         <div className="text-gray-700 mb-4">{profilCherche}</div>
         <div className="text-gray-700 mb-4">{whatWeOffer}</div>
-        <div className="flex justify-center gap-3">
+    
+        <div className="flex ">
+          <button
+            type="button"
+            className="items-center text-blue-600 text-sm bg-blue-50 px-3 py-1.5 rounded-full mb-4"
+          >
+            Expérience: {experience}
+          </button>
+        </div>
+
+        {/* Skills Buttons */}
+        <div className="font-[sans-serif] mt-1 flex flex-wrap gap-4 items-center mx-auto">
+          <div className="flex flex-wrap gap-4 mt-2">
+            {skillsRequired.map((skill, index) => (
+              <button
+                key={index}
+                type="button"
+                className="flex items-center text-buttonColor1 text-sm bg-backgroundColor2 px-3 py-1.5 tracking-wide rounded-full"
+              >
+                {skill}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Postuler Button */}
+        <div className="flex justify-center mt-2">
           <button className="bg-buttonColor1 text-white px-4 py-2 rounded-full hover:bg-buttonColor2">
             Postuler
           </button>

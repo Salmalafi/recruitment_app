@@ -8,11 +8,14 @@ export default {
     extend: {
 
       colors: {
+        blue:"#bbcde6",
+        purple:"#a88cd4",
       customBlue: '#e5e7fa',
       buttonColor1: "#624fb3",
       buttonColor2:"#9794e5",
       buttonColor3:"#705fa3",
       buttonColor4:"#2d283e",
+      backgroundColor2:"#e7e6ff",
       backgroundColor1:"#593e74",
     hoverColor:"#9f90c2",
       },
