@@ -32,7 +32,6 @@ function DropdownFilter({ align }) {
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
-  // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }) => {
       if (!dropdown.current) return;
@@ -43,7 +42,6 @@ function DropdownFilter({ align }) {
     return () => document.removeEventListener('click', clickHandler);
   }, [dropdownOpen]);
 
-  // close if the esc key is pressed
   useEffect(() => {
     const keyHandler = ({ keyCode }) => {
       if (!dropdownOpen || keyCode !== 27) return;
@@ -83,8 +81,7 @@ function DropdownFilter({ align }) {
 
   const handleApplyFilters = () => {
     setDropdownOpen(false);
-    // Apply your filtering logic here in the parent component (OffersList)
-    // Pass filters state to parent component or trigger filtering function
+   
   };
 
   return (
@@ -119,7 +116,7 @@ function DropdownFilter({ align }) {
           <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">Filters</div>
           <div className="flex">
             <ul className="flex-1 mb-4">
-              {/* Types de contrats */}
+             
               <li className="py-1 px-3">
                 <label className="flex items-center">
                   <span className="text-sm font-medium ml-2">Types de contrats</span>
@@ -140,7 +137,7 @@ function DropdownFilter({ align }) {
                   ))}
                 </ul>
               </li>
-              {/* Rythmes de travail */}
+         
               <li className="py-1 px-3">
                 <label className="flex items-center">
                   <span className="text-sm font-medium ml-2">Rythmes de travail</span>
@@ -163,7 +160,7 @@ function DropdownFilter({ align }) {
               </li>
             </ul>
             <ul className="flex-1 mb-4 ml-4">
-              {/* Date de publication */}
+             
               <li className="py-1 px-3">
                 <label className="flex items-center">
                   <span className="text-sm font-medium ml-2">Date de publication</span>
@@ -184,7 +181,7 @@ function DropdownFilter({ align }) {
                   ))}
                 </ul>
               </li>
-              {/* Expériences exigées */}
+             
               <li className="py-1 px-3">
                 <label className="flex items-center">
                   <span className="text-sm font-medium ml-2">Expériences exigées</span>

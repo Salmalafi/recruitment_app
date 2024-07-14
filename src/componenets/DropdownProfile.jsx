@@ -96,7 +96,7 @@ function DropdownProfile({ align }) {
               <Link
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3"
                 to="/settings"
-                onClick={() => setDropdownOpen(false)} // Close dropdown on link click
+                onClick={() => setDropdownOpen(false)} 
               >
                 Settings
               </Link>

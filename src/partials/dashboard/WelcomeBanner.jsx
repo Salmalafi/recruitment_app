@@ -1,6 +1,6 @@
 import React from 'react';
 
-function WelcomeBanner({ firstName, lastName }) {
+function WelcomeBanner({ firstName, lastName, role }) {
   return (
     <div className="relative bg-customBlue dark:bg-indigo-500 p-4 sm:p-6 rounded-sm overflow-hidden mb-8">
       {/* Background illustration */}
@@ -47,11 +47,16 @@ function WelcomeBanner({ firstName, lastName }) {
 
       {/* Content */}
       <div className="relative">
-      <h1 className="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1">Good afternoon, {lastName} {firstName} 👋</h1>
-        <p className="dark:text-indigo-200">Here is what’s happening with your projects today:</p>
+        <h1 className="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1">Bonjour, {lastName} {firstName} 👋</h1>
+        <p className="dark:text-indigo-200">
+          {role === 'admin' && 'Nous avons de nouvelles statistiques pour vous aujourd\'hui.'}
+          {role === 'HrAgent' && 'Nous avons de nouvelles candidatures à examiner.'}
+          {role === 'Candidate' && 'Nous avons de nouvelles opportunités pour vous aujourd\'hui.'}
+        </p>
       </div>
     </div>
   );
 }
 
 export default WelcomeBanner;
+

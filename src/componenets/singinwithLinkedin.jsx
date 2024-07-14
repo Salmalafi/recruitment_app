@@ -1,29 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import API from '../api'; // Adjust the import path according to your project structure
+import API from '../api'; 
 import styles from './signinwithLinkedin.module.css';
 import LinkedInIcon from '../assets/linkedin_icon.png';
 const SignInWithLinkedIn = () => {
-  const [isLoading, setIsLoading] = useState(false); // TypeScript infers 'boolean' type here
+  const [isLoading, setIsLoading] = useState(false); 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [profileImageUrl, setProfileImageUrl] = useState('');
  
-  // Load LinkedIn credentials from environment variables
   const LINKEDIN_ENV = {
     CLIENT_ID: "78zmb8xufig9qm",
     SCOPES: "email profile",
     REDIRECT_URI: "api.linkedin.com/v2/userinfo",
   };
-  
-  // Handle the client redirection to LinkedIn authentication portal
   const onSignInLinkedIn = () => {
     console.log('Redirecting to LinkedIn authentication portal');
     window.location.replace(
       `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${LINKEDIN_ENV.CLIENT_ID}&scope=${encodeURIComponent(LINKEDIN_ENV.SCOPES)}&redirect_uri=${encodeURIComponent(LINKEDIN_ENV.REDIRECT_URI)}`
     );
   };
-  
-  // Check if a LinkedIn authorization code is provided
   useEffect(() => {
     const authorizationCode = new URLSearchParams(window.location.search).get('code');
     console.log('Authorization Code:', authorizationCode);
@@ -47,7 +42,7 @@ const SignInWithLinkedIn = () => {
   return (
     <div className="App">
       {isLoading ? (
-        // Loading
+    
         <div className="Loading">
           <div className="Progress_Bar">
             <div className="Circle Border"></div>
@@ -55,7 +50,7 @@ const SignInWithLinkedIn = () => {
           <span>Chargement en cours..</span>
         </div>
       ) : email ? (
-        // Current identity from LinkedIn
+     
         <div className="Identity">
           <i>
             Vous êtes connecté(e) à LinkedIn ✅
@@ -69,7 +64,7 @@ const SignInWithLinkedIn = () => {
           </div>
         </div>
       ) : (
-        // Sign-in with LinkedIn
+       
         <div className={styles.Signin_Content}>
           <div className="Information">
             <span>

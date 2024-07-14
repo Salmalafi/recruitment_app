@@ -51,9 +51,13 @@ const Login = () => {
 
         const decodedToken = jwtDecode(access_token); // Correct usage
         localStorage.setItem('userEmail', decodedToken.email);
-        localStorage.setItem('userRole', decodedToken.role);
+        localStorage.setItem('userRole', decodedToken.roles);
 
-        navigate('/dashboard');
+        if (decodedToken.roles === 'Candidate') {
+          navigate('/dashboard');
+        } else if (decodedToken.roles === 'HrAgent') {
+          navigate('/dashboardHR');
+        }
       } catch (error) {
         console.error('Login error:', error);
       }

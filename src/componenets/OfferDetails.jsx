@@ -1,8 +1,10 @@
-import React from 'react';
-import { MapPin, Briefcase, FileText, Calendar } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { MapPin, Briefcase, FileText, Calendar, SquareCheck } from 'lucide-react';
+import axios from 'axios';
 
 const OfferDetails = ({ offer, onClose }) => {
   const {
+    _id,
     reference,
     title,
     contractType,
@@ -14,6 +16,59 @@ const OfferDetails = ({ offer, onClose }) => {
     skillsRequired,
     experience
   } = offer;
+
+  const [applied, setApplied] = useState(false);
+  const [userRole, setUserRole] = useState('');
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userEmail = localStorage.getItem('userEmail');
+        const response = await axios.post('http://localhost:3000/users/findByEmail', { email: userEmail });
+        if (response.data && response.data._id && response.data.role) {
+          const userId = response.data._id;
+          const userRole = response.data.role;
+          setUserRole(userRole);
+
+          if (userRole === 'Candidate') {
+            fetchUserApplications(userId);
+          }
+        } else {
+          console.error('User not found or missing _id or role in response');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const fetchUserApplications = async (userId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`http://localhost:3000/applications/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const userApplications = response.data;
+      const appliedToThisOffer = userApplications.some(app => app.offerId === _id);
+      setApplied(appliedToThisOffer);
+    } catch (error) {
+      console.error('Error fetching user applications:', error);
+    }
+  };
+
+  const handleCheckApplication = () => {
+   
+    console.log('Navigate to check application page');
+  };
+
+  const handleApply = () => {
+ 
+    console.log('Applying for the offer');
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -54,19 +109,18 @@ const OfferDetails = ({ offer, onClose }) => {
         <div className="text-gray-700 mb-4">{jobDescription}</div>
         <div className="text-gray-700 mb-4">{profilCherche}</div>
         <div className="text-gray-700 mb-4">{whatWeOffer}</div>
-    
-        <div className="flex ">
+
+        <div className="flex">
           <button
             type="button"
-            className="items-center text-blue-600 text-sm bg-blue-50 px-3 py-1.5 rounded-full mb-4"
+            className="items-center text-blue-600 text-sm bg-blue-50 py-1.5 rounded-full mb-4"
           >
             Expérience: {experience}
           </button>
         </div>
 
-        {/* Skills Buttons */}
-        <div className="font-[sans-serif] mt-1 flex flex-wrap gap-4 items-center mx-auto">
-          <div className="flex flex-wrap gap-4 mt-2">
+        <div className="font-[sans-serif] flex flex-wrap gap-4 items-center mx-auto">
+          <div className="flex flex-wrap gap-4">
             {skillsRequired.map((skill, index) => (
               <button
                 key={index}
@@ -79,12 +133,26 @@ const OfferDetails = ({ offer, onClose }) => {
           </div>
         </div>
 
-        {/* Postuler Button */}
-        <div className="flex justify-center mt-2">
-          <button className="bg-buttonColor1 text-white px-4 py-2 rounded-full hover:bg-buttonColor2">
-            Postuler
-          </button>
-        </div>
+       
+        {userRole === 'Candidate' && applied ? (
+          <div className="flex justify-center mt-2">
+            <div className="flex items-center">
+              <SquareCheck size={18} className="text-green-500 mr-2" />
+              <span className="text-green-500">Déjà postulé</span>
+            </div>
+            <button className="bg-buttonColor1 text-white px-4 py-2 rounded-full hover:bg-buttonColor2 ml-4" onClick={handleCheckApplication}>
+              Voir votre candidature
+            </button>
+          </div>
+        ) : (
+          userRole === 'Candidate' && (
+            <div className="flex justify-center mt-2">
+              <button className="bg-buttonColor1 text-white px-4 py-2 rounded-full hover:bg-buttonColor2" onClick={handleApply}>
+                Postuler
+              </button>
+            </div>
+          )
+        )}
       </div>
     </div>
   );

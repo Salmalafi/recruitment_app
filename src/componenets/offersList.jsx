@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Offer from './offer';
-import FilterButton from '../componenets/DropdownFilter';
 import axios from 'axios';
+import Offer from '../componenets/offer';
+import FilterButton from '../componenets/DropdownFilter';
 
 const OffersList = () => {
   const [offers, setOffers] = useState([]);
@@ -9,26 +9,23 @@ const OffersList = () => {
   const [contractFilter, setContractFilter] = useState('all');
   const [typeContrat, setTypeContrat] = useState('all');
 
+  const fetchOffers = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/offers');
+      setOffers(response.data);
+    } catch (error) {
+      console.error('Error fetching offers:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchOffers = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/offers');
-        setOffers(response.data);
-      } catch (error) {
-        console.error('Error fetching offers:', error);
-      }
-    };
     fetchOffers();
   }, []);
 
   const handleSearchChange = (event) => {
-    // Normalize the search term by removing accents
     const normalizedSearchTerm = event.target.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    
-    // Update the state with the normalized search term
     setSearchTerm(normalizedSearchTerm.toLowerCase());
   };
-  
 
   const handleContractFilterChange = (event) => {
     setContractFilter(event.target.value);
@@ -50,9 +47,9 @@ const OffersList = () => {
       <div className="my-4 flex justify-center items-center mt-6">
         <input
           type="text"
-          placeholder="Rechercher par titre de poste ou référence..."
+          placeholder="Search by job title or reference..."
           value={searchTerm}
-          onChange={handleSearchChange} // Bind handleSearchChange to onChange event
+          onChange={handleSearchChange}
           className="border border-buttonColor2 p-2 rounded-full mr-2"
           style={{ width: '500px' }}
         />
@@ -62,9 +59,10 @@ const OffersList = () => {
       <div className="grid grid-cols-1 p-8 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredOffers.map((offer) => (
           <Offer
-            key={offer._id} // Ensure each Offer component has a unique key
+            key={offer._id}
             reference={offer.reference}
             title={offer.title}
+            fetchOffers={fetchOffers} 
             contractType={offer.contractType}
             location={offer.location}
             description={offer.jobDescription}
@@ -75,7 +73,8 @@ const OffersList = () => {
             whatWeOffer={offer.whatWeOffer}
             skillsRequired={offer.skillsRequired}
             experience={offer.experience}
-            _id={offer._id} // Pass _id as a prop to Offer component
+            createdAt={offer.createdAt}
+            _id={offer._id}
           />
         ))}
       </div>
@@ -84,6 +83,8 @@ const OffersList = () => {
 };
 
 export default OffersList;
+
+
 
 
 

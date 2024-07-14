@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-
+import {jwtDecode} from 'jwt-decode'; 
 import SidebarLinkGroup from './SidebarLinkGroup';
 import logo from '../assets/capgemini.png';
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
@@ -12,8 +12,34 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
   const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
   const [sidebarExpanded, setSidebarExpanded] = useState(storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true');
+  const getToken = () => {
+    const token = localStorage.getItem('token'); // Retrieve token from localStorage
+    if (!token) {
+      return null;
+    }
+  
+    try {
+      const decodedToken = jwtDecode(token); 
+      return decodedToken;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
+  };
+  
+  const decodedToken = getToken();
+  const role = decodedToken ? decodedToken.roles : null; 
 
-  // close on click outside
+    const getDashboardPath = () => {
+      if (role === 'Candidate') {
+        return '/dashboard';
+      } else if (role === 'HrAgent') {
+        return '/dashboardHR/offers';
+      }
+   
+      return '/dashboard'; 
+    };
+
   useEffect(() => {
     const clickHandler = ({ target }) => {
       if (!sidebar.current || !trigger.current) return;
@@ -140,19 +166,20 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       </a>
                       <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
                         <ul className={`pl-9 mt-1 ${!open && 'hidden'}`}>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/dashboard"
-                              className={({ isActive }) =>
-                                'block transition duration-150 truncate ' + (isActive ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-200')
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Listing
-                              </span>
-                            </NavLink>
-                          </li>
+                        <li className="mb-1 last:mb-0">
+      <NavLink
+        end
+        to={getDashboardPath()}
+        className={({ isActive }) =>
+          'block transition duration-150 truncate ' +
+          (isActive ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-200')
+        }
+      >
+        <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+          {role === 'HRAgent' ? 'Offer Dashboard' : 'Listing'}
+        </span>
+      </NavLink>
+    </li>
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end

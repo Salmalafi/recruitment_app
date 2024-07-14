@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
+import OfferDetails from './OfferDetails'; 
 
 const MyApplications = () => {
   const [applications, setApplications] = useState([]);
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedOffer, setSelectedOffer] = useState(null); 
   const userEmail = localStorage.getItem('userEmail');
   const token = localStorage.getItem('token');
 
@@ -38,7 +40,7 @@ const MyApplications = () => {
             Authorization: `Bearer ${token}`
           }
         });
-        // Set applications with offer data included
+     
         const applicationsWithOffers = await Promise.all(
           response.data.map(async (application) => {
             try {
@@ -71,7 +73,7 @@ const MyApplications = () => {
   const downloadFile = async (resumeUrl) => {
     try {
       const response = await axios.get(resumeUrl, {
-        responseType: 'blob', // Ensure response type is blob for file download
+        responseType: 'blob', 
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -87,6 +89,10 @@ const MyApplications = () => {
     } catch (error) {
       console.error('Error downloading file:', error);
     }
+  };
+
+  const openOfferDetails = (offer) => {
+    setSelectedOffer(offer); 
   };
 
   if (!userEmail || !token) {
@@ -126,7 +132,7 @@ const MyApplications = () => {
             <tr key={application._id}>
               <td className="p-4 text-sm font-semibold text-gray-800">{index + 1}</td>
               <td className="p-4 text-sm font-semibold text-gray-800">
-                <span className="w-[68px] block text-center py-1 border border-yellow-500 text-yellow-600 rounded text-xs">{application.status}</span>
+                <span className="px-2 py-1 border border-yellow-500 text-yellow-600 rounded text-xs">{application.status}</span>
               </td>
               <td className="p-4 text-sm font-semibold text-gray-800">{application.date}</td>
               <td className="p-4 text-sm font-semibold text-gray-800">
@@ -137,23 +143,34 @@ const MyApplications = () => {
                     defaultScale={0.05}
                     hideRotation
                   />
-                  <div className='w-2'></div>
+                  <div className='w-3'></div>
                   <button
-                    className="bg-blue-500 hover:bg-blue-700 ml-4 text-white h-8 w-20 font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                    className="bg-buttonColor2 hover:bg-blue-700 text-gray-900 h-8 w-20 font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
                     onClick={() => downloadFile(`http://localhost:3000/applications/resume/${application.resume}`)}
                   >
                     Download
                   </button>
                 </div>
               </td>
-              <td className="p-4 text-sm font-semibold text-gray-800">{application.offer ? application.offer.title : 'Offer Not Found'}</td>
+              <td className="p-4 text-sm font-semibold text-gray-800">
+             
+                <button
+                  className="text-blue-600 hover:underline"
+                  onClick={() => openOfferDetails(application.offer)}
+                >
+                  {application.offer ? application.offer.title : 'Offer Not Found'}
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {selectedOffer && (
+        <OfferDetails offer={selectedOffer} onClose={() => setSelectedOffer(null)} />
+      )}
     </div>
   );
 };
 
 export default MyApplications;
-

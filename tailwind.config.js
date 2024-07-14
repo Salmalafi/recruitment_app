@@ -17,6 +17,8 @@ export default {
       buttonColor4:"#2d283e",
       backgroundColor2:"#e7e6ff",
       backgroundColor1:"#593e74",
+      customPurple:"#9094fc",
+      buttonColor5:"#9cb6dd",
     hoverColor:"#9f90c2",
       },
       keyframes: {

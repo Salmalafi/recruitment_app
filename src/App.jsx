@@ -17,6 +17,7 @@ import MyApplications from './componenets/MyApplications';
 import * as PDFJS from 'pdfjs-dist'
 import 'pdfjs-dist/web/pdf_viewer.css';
 import ForgotPasswordStepper from './componenets/ForgotPasswordStepper';
+import DashboardHR from './pages/DashboardHR';
 PDFJS.GlobalWorkerOptions.workerSrc ='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 
@@ -77,7 +78,7 @@ const App = () => {
         <Routes>
         
           <Route path="/dashboard/*" element={<Dashboard />} />
-
+          <Route path="/dashboardHR/*" element={<DashboardHR/>} />
           <Route path="/" element={
             <>
               <Navbar /> 
