@@ -26,6 +26,14 @@ function DashboardHR() {
   const [userData, setUserData] = useState({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [offersWithExpiry, setOffersWithExpiry] = useState([]);
+  
+  const handleAlert = (type, message) => {
+    setAlert({ type, message });
+    
+    setTimeout(() => {
+      setAlert(null);
+    }, 5000); 
+  };
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -72,30 +80,52 @@ function DashboardHR() {
         <main>
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             {/* Welcome banner */}
-            <WelcomeBanner align="right" role={userData.role} lastName={userData.lastName} firstName={userData.firstName} />
+            
 
             {/* Routes */}
             <Routes>
               {/* Route for dashboard cards */}
               <Route path="/" element={
+                <>
+ <WelcomeBanner align="right" role={userData.role} lastName={userData.lastName} firstName={userData.firstName} />
                 <div className="grid grid-cols-12 gap-6">
+                 
                   <DashboardCard01 />
                   <DashboardCard02 />
                   <DashboardCard03 />
                   <DashboardCard04 />
-                  <DashboardCard05 />
-                  <DashboardCard06 />
+                 {/*          <DashboardCard05 />   <DashboardCard06 />
+                   
+                   <DashboardCard08 />
+                   <DashboardCard09 />
+                     
+                  <DashboardCard10 />*/} 
                   <DashboardCard07 />
-                  <DashboardCard08 />
-                  <DashboardCard09 />
-                  <DashboardCard10 />
+                
+                
                 </div>
+                </>
               } />
 
               {/* Route for Add Offer Form */}
               <Route path="/addoffer" element={<AddOfferForm />} />
-              <Route path="/offers" element={<OffersList offers={offersWithExpiry} />} />
-              <Route path="/edit/:id" element={<EditOfferForm/>} />
+              <Route path="/offers" element={
+                <>
+                 <WelcomeBanner align="right" role={userData.role} lastName={userData.lastName} firstName={userData.firstName} />
+
+                <OffersList offers={offersWithExpiry} />
+                </>
+                
+                } />
+              <Route path="/edit/:id" element={
+                
+                
+                <>
+                 
+                <EditOfferForm/>
+                
+                </>
+              }/>
               <Route path="/applications/:id" element={<Applications/>} />
             </Routes>
           </div>

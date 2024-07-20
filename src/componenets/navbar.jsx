@@ -14,7 +14,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-buttonColor4 p-3 h-16 fixed w-full top-0 left-0 z-50">
+    <nav className="bg-buttonColor4 p-3 h-16  fixed w-full top-0 left-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
         <div>
           <img src={myImage} alt="recrutement" className="h-12 w-auto rounded-full" />

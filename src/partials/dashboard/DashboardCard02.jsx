@@ -10,18 +10,18 @@ function DashboardCard01() {
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const token = localStorage.getItem('access_token'); // Assuming the token is stored in localStorage
+        const token = localStorage.getItem('token'); 
         const response = await axios.get('http://localhost:3000/applications', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        // Filter applications created today
         const today = new Date().toISOString().split('T')[0];
         const filteredApplications = response.data.filter(app => app.date.split('T')[0] === today);
 
-        setTodayApplications(filteredApplications.length); // Assuming response.data is an array of applications
+        setTodayApplications(filteredApplications.length); 
+        console.log("Candidature d'ajourd'hui",filteredApplications.length);
       } catch (error) {
         console.error('Error fetching applications:', error);
       }
@@ -60,7 +60,7 @@ function DashboardCard01() {
         <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase mb-1">Candidatures</div>
         <div className="flex items-start">
           <div className="text-2xl font-bold text-slate-800 dark:text-slate-100 mr-1">{todayApplications}</div>
-          <div className="text-xs font-semibold text-white px-1 bg-emerald-500 rounded-full">+49%</div>
+          { /* <div className="text-xs font-semibold text-white px-1 bg-emerald-500 rounded-full">+49%</div> */}
         </div>
       </div>
     </div>

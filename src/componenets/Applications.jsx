@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { CircleCheck, CircleX } from 'lucide-react';
-
+import { Viewer } from '@react-pdf-viewer/core';
+import '@react-pdf-viewer/core/lib/styles/index.css';
 const Applications = () => {
     const [applications, setApplications] = useState([]);
     const [users, setUsers] = useState({});
     const { id } = useParams();
-
+    const token = localStorage.getItem('token');
     useEffect(() => {
         const fetchApplications = async () => {
             try {
@@ -115,8 +116,8 @@ const Applications = () => {
                 return '1st Interview';
             case 'Accepted for 1st Interview':
                 return 'In-Depth Interview';
-            case 'Hired':
-                return 'Hired';
+                case 'Accepted for In-Depth Interview':
+                    return 'Hired';
             default:
                 return '';
         }
@@ -164,10 +165,10 @@ const Applications = () => {
                         </div>
                     </div>
                 );
-            case 'Hired':
+            case 'Accepted for In-Depth Interview':
                 return (
                     <div>
-                        <div className="text-sm text-gray-700">Hired:</div>
+                        <div className="text-sm justify-center text-gray-700">Hire</div>
                         <div className="flex space-x-2 items-center mt-2">
                             <button
                                 className="text-green-500 focus:outline-none"
@@ -184,6 +185,8 @@ const Applications = () => {
                         </div>
                     </div>
                 );
+            case 'Hired':
+                return null;
             case 'Declined':
             case 'Declined for Next Step':
                 return null;
@@ -233,16 +236,24 @@ const Applications = () => {
                                     {application.status}
                                 </span>
                             </td>
-                            <td className="p-4">
-                                <a
-                                    href={application.resumeUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-500 underline"
-                                >
-                                    View Resume
-                                </a>
-                            </td>
+                            <td className="p-4 text-sm font-semibold text-gray-800">
+    <div className="flex items-center">
+        <Viewer
+            fileUrl={`http://localhost:3000/applications/resume/${application.resume}`}
+            httpHeaders={{ Authorization: `Bearer ${token}` }}
+            defaultScale={0.05}
+            hideRotation
+        />
+        <div className="w-3"></div>
+        <button
+            className="bg-buttonColor2 hover:bg-blue-700 text-gray-900 h-8 w-20 font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+            onClick={() => downloadFile(`http://localhost:3000/applications/resume/${application.resume}`)}
+        >
+            Download
+        </button>
+    </div>
+</td>
+
                             <td className="p-4">
                                 {users[application.userId] ? (
                                     `${users[application.userId].firstName} ${users[application.userId].lastName}`

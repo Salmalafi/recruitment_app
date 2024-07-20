@@ -13,7 +13,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
   const [sidebarExpanded, setSidebarExpanded] = useState(storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true');
   const getToken = () => {
-    const token = localStorage.getItem('token'); // Retrieve token from localStorage
+    const token = localStorage.getItem('token'); 
     if (!token) {
       return null;
     }
@@ -26,7 +26,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
       return null;
     }
   };
-  
+  const userRole=localStorage.getItem("userRole") ;
   const decodedToken = getToken();
   const role = decodedToken ? decodedToken.roles : null; 
 
@@ -49,8 +49,6 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
     document.addEventListener('click', clickHandler);
     return () => document.removeEventListener('click', clickHandler);
   });
-
-  // close if the esc key is pressed
   useEffect(() => {
     const keyHandler = ({ keyCode }) => {
       if (!sidebarOpen || keyCode !== 27) return;
@@ -122,9 +120,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
             
               
               {/* Job Board */}
-              <SidebarLinkGroup activecondition={pathname.includes('job')}>
-                {(handleClick, open) => {
-                  return (
+              
                     <React.Fragment>
                       <a
                         href="#0"
@@ -167,6 +163,19 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
                         <ul className={`pl-9 mt-1 ${!open && 'hidden'}`}>
                         <li className="mb-1 last:mb-0">
+                            <NavLink
+                              end
+                              to="/dashboardHR/"
+                              className={({ isActive }) =>
+                                'block transition duration-150 truncate ' + (isActive ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-200')
+                              }
+                            >
+                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                              {userRole === 'HrAgent' ? 'Dashboard' : null}
+                              </span>
+                            </NavLink>
+                          </li>
+                        <li className="mb-1 last:mb-0">
       <NavLink
         end
         to={getDashboardPath()}
@@ -176,42 +185,27 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
         }
       >
         <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-          {role === 'HRAgent' ? 'Offer Dashboard' : 'Listing'}
+          Job offers
         </span>
       </NavLink>
     </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/job/job-post"
-                              className={({ isActive }) =>
-                                'block transition duration-150 truncate ' + (isActive ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-200')
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                               Favoris
-                              </span>
-                            </NavLink>
-                          </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/job/company-profile"
-                              className={({ isActive }) =>
-                                'block transition duration-150 truncate ' + (isActive ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-200')
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Company Profile
-                              </span>
-                            </NavLink>
-                          </li>
-                        </ul>
+    <li className="mb-1 last:mb-0">
+  <NavLink
+    end
+    to={userRole === 'HrAgent' ? "/dashboardHR/addoffer" : "/dashboard/favorites"}
+    className={({ isActive }) =>
+      'block transition duration-150 truncate ' + (isActive ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-200')
+    }
+  >
+    <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+      {userRole === 'HrAgent' ? 'Add Offer' : 'Favoris'}
+    </span>
+  </NavLink>
+</li>
+ </ul>
                       </div>
                     </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
+               
           
               {/* Campaigns */}
               <li className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${pathname.includes('/dashboard/myapplications') && 'bg-slate-900'}`}>
@@ -221,8 +215,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 location.pathname.includes('/dashboard/myapplications') ? 'hover:text-slate-200' : 'hover:text-white'
               }`}
             >
-              <div className="flex items-center">
-                <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
+           
+             <div className="flex ml-1 items-center">
+                <svg className="shrink-0 h-6  w-7" viewBox="0 0 24 24">
                   <path
                     className={`fill-current ${location.pathname.includes('/dashboard/myapplications') ? 'text-indigo-500' : 'text-slate-600'}`}
                     d="M20 7a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 0120 7zM4 23a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 014 23z"
@@ -233,17 +228,16 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   />
                 </svg>
                 <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                  My applications
+                {userRole === 'HrAgent' ? 'All applications' : 'My applications'}
                 </span>
               </div>
+          
             </NavLink>
 
 </li>
 
               {/* Settings */}
-              <SidebarLinkGroup activecondition={pathname.includes('settings')}>
-                {(handleClick, open) => {
-                  return (
+              
                     <React.Fragment>
                       <a
                         href="#0"
@@ -280,11 +274,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                             </span>
                           </div>
                           {/* Icon */}
-                          <div className="flex shrink-0 ml-2">
-                            <svg className={`w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 ${open && 'rotate-180'}`} viewBox="0 0 12 12">
-                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                            </svg>
-                          </div>
+                       
                         </div>
                       </a>
                       <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
@@ -315,70 +305,17 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                               </span>
                             </NavLink>
                           </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/settings/apps"
-                              className={({ isActive }) =>
-                                'block transition duration-150 truncate ' + (isActive ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-200')
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Connected Apps
-                              </span>
-                            </NavLink>
-                          </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/settings/plans"
-                              className={({ isActive }) =>
-                                'block transition duration-150 truncate ' + (isActive ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-200')
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Plans
-                              </span>
-                            </NavLink>
-                          </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/settings/billing"
-                              className={({ isActive }) =>
-                                'block transition duration-150 truncate ' + (isActive ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-200')
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Billing & Invoices
-                              </span>
-                            </NavLink>
-                          </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink
-                              end
-                              to="/settings/feedback"
-                              className={({ isActive }) =>
-                                'block transition duration-150 truncate ' + (isActive ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-200')
-                              }
-                            >
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Give Feedback
-                              </span>
-                            </NavLink>
-                          </li>
+                         
+                       
+                      
                         </ul>
                       </div>
                     </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
+             
              
            
               {/* Onboarding */}
-              <SidebarLinkGroup>
-                {(handleClick, open) => {
-                  return (
+              
                     <React.Fragment>
                       <a
                         href="#0"
@@ -421,33 +358,10 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                               </span>
                             </NavLink>
                           </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink end to="/onboarding-02" className="block text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Step 2
-                              </span>
-                            </NavLink>
-                          </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink end to="/onboarding-03" className="block text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Step 3
-                              </span>
-                            </NavLink>
-                          </li>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink end to="/onboarding-04" className="block text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Step 4
-                              </span>
-                            </NavLink>
-                          </li>
                         </ul>
                       </div>
                     </React.Fragment>
-                  );
-                }}
-              </SidebarLinkGroup>
+               
              
             </ul>
           </div>
@@ -458,7 +372,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
           <div className="px-3 py-2">
             <button onClick={() => setSidebarExpanded(!sidebarExpanded)}>
               <span className="sr-only">Expand / collapse sidebar</span>
-              <svg className="w-6 h-6 fill-current sidebar-expanded:rotate-180" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 fill-current max-w-full sidebar-expanded:rotate-180" viewBox="0 0 24 24">
                 <path className="text-slate-400" d="M19.586 11l-5-5L16 4.586 23.414 12 16 19.414 14.586 18l5-5H7v-2z" />
                 <path className="text-slate-600" d="M3 23H1V1h2z" />
               </svg>

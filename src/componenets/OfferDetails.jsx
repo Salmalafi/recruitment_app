@@ -71,10 +71,10 @@ const OfferDetails = ({ offer, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg overflow-y-auto max-h-130 relative">
+    <div className="fixed inset-0 z-50 pt-12 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white w-full  max-w-md p-6 rounded-lg shadow-lg overflow-y-auto max-h-100 relative">
         <button
-          className="absolute top-2 right-2 bg-white rounded-full p-2 hover:bg-gray-200"
+          className="absolute top-8 right-2  bg-white rounded-full p-2 hover:bg-gray-200"
           onClick={onClose}
         >
           <svg

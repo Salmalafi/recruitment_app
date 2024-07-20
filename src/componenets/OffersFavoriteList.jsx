@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Offer from './offer';
+import Offer from '../componenets/offer';
 import FilterButton from '../componenets/DropdownFilter';
+import Favorites from './Favorites';
 
-const OffersList = ({ showOnlyFavorites }) => {
+const OffersFavoriteList = () => {
   const [offers, setOffers] = useState([]);
-  const [favorites, setFavorites] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [contractFilter, setContractFilter] = useState('all');
   const [typeContrat, setTypeContrat] = useState('all');
@@ -19,25 +19,9 @@ const OffersList = ({ showOnlyFavorites }) => {
     }
   };
 
-  const fetchFavorites = async () => {
-    const userEmail = localStorage.getItem('userEmail');
-    try {
-      const userResponse = await axios.post('http://localhost:3000/users/findByEmail', { email: userEmail });
-      const userId = userResponse.data._id;
-
-      const favoritesResponse = await axios.get(`http://localhost:3000/favorites/user/${userId}`);
-      setFavorites(favoritesResponse.data.map(fav => fav.offerId));
-    } catch (error) {
-      console.error('Error fetching favorites:', error);
-    }
-  };
-
   useEffect(() => {
     fetchOffers();
-    if (showOnlyFavorites) {
-      fetchFavorites();
-    }
-  }, [showOnlyFavorites]);
+  }, []);
 
   const handleSearchChange = (event) => {
     const normalizedSearchTerm = event.target.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -56,8 +40,7 @@ const OffersList = ({ showOnlyFavorites }) => {
     const titleMatches = offer.title.toLowerCase().includes(searchTerm.toLowerCase());
     const contractFilterMatches = contractFilter === 'all' || offer.contractType === contractFilter;
     const typeContratMatches = typeContrat === 'all' || offer.typeContrat === typeContrat;
-    const favoriteFilterMatches = !showOnlyFavorites || favorites.includes(offer._id);
-    return titleMatches && contractFilterMatches && typeContratMatches && favoriteFilterMatches;
+    return titleMatches && contractFilterMatches && typeContratMatches;
   });
 
   return (
@@ -76,11 +59,11 @@ const OffersList = ({ showOnlyFavorites }) => {
 
       <div className="grid grid-cols-1 p-8 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredOffers.map((offer) => (
-          <Offer
+          <Favorites
             key={offer._id}
             reference={offer.reference}
             title={offer.title}
-            fetchOffers={fetchOffers}
+            fetchOffers={fetchOffers} 
             contractType={offer.contractType}
             location={offer.location}
             description={offer.jobDescription}
@@ -93,7 +76,7 @@ const OffersList = ({ showOnlyFavorites }) => {
             experience={offer.experience}
             createdAt={offer.createdAt}
             _id={offer._id}
-            onApplicationSubmit={fetchOffers}
+          onApplicationSubmit={fetchOffers}
           />
         ))}
       </div>
@@ -101,11 +84,4 @@ const OffersList = ({ showOnlyFavorites }) => {
   );
 };
 
-export default OffersList;
-
-
-
-
-
-
-
+export default OffersFavoriteList;

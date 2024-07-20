@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import OffersList from '../componenets/offersList'; // Update path as per your project structure
+import OffersList from '../componenets/offersList'; 
 import Sidebar from '../partials/Sidebar';
 import Header from '../partials/Header';
 import WelcomeBanner from '../partials/dashboard/WelcomeBanner';
-import MyApplications from '../componenets/MyApplications'; // Update path as per your project structure
+import MyApplications from '../componenets/MyApplications'; 
 import { Route, Routes } from 'react-router-dom';
+import Favorites from '../componenets/Favorites';
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [offersWithExpiry, setOffersWithExpiry] = useState([]);
   const [userData, setUserData] = useState({});
+ 
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -61,12 +63,14 @@ function Dashboard() {
 
         <main>
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <WelcomeBanner align="right" lastName={userData.lastName} firstName={userData.firstName} />
+            <WelcomeBanner align="right" lastName={userData.lastName} firstName={userData.firstName} role={userData.role} />
            
             <Routes>
-              <Route path="/" element={<OffersList offers={offersWithExpiry} />} />
-              <Route exact path="/myapplications" element={<MyApplications />} />
-            </Routes>
+        <Route path="/" element={<OffersList showOnlyFavorites={false} />} />
+        <Route exact path="/myapplications" element={<MyApplications />} />
+        <Route exact path="/myapplications/:id" element={<MyApplications />} />
+        <Route exact path="/favorites" element={<OffersList showOnlyFavorites={true} />} />
+      </Routes>
           </div>
         </main>
       </div>

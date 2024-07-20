@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import SuccessAlert from './SuccessAlert';
 
-const Apply = ({ show, onClose, userId, offerId }) => {
+const Apply = ({ show, onClose, userId, offerId,  onApplicationSubmit }) => {
   const [files, setFiles] = useState([]);
   const [fileError, setFileError] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
@@ -11,7 +11,7 @@ const Apply = ({ show, onClose, userId, offerId }) => {
   const handleUpload = () => {
     const formData = new FormData();
     files.forEach(file => {
-      formData.append('resume', file); // Ensure 'resume' matches the field name expected by the backend
+      formData.append('resume', file); 
     });
   
     if (userId && offerId) {
@@ -21,7 +21,7 @@ const Apply = ({ show, onClose, userId, offerId }) => {
       formData.append('status', 'PENDING'); 
     } else {
       console.error('userId or offerId is null or undefined');
-      // Handle this error condition appropriately
+   
     }
     
     const token = localStorage.getItem('token');
@@ -31,10 +31,12 @@ const Apply = ({ show, onClose, userId, offerId }) => {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
+   
     })
     .then(response => {
       console.log('Application submitted successfully:', response.data);
       setShowSuccess(true);
+      onApplicationSubmit();
     })
     .catch(error => {
       console.error('Error submitting application:', error);

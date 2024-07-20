@@ -3,7 +3,8 @@ import axios from 'axios';
 import travail from '../assets/team2.jpg';
 import Select from 'react-select';
 import countryList from 'react-select-country-list';
-
+import SucessInscription from '../componenets/sucessInscription';
+import { useNavigate } from 'react-router-dom';
 const SignUp = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -13,9 +14,10 @@ const SignUp = () => {
   const [address, setAddress] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  
+  const [role, setRole] = useState('Candidate');
+  const navigate = useNavigate();
   const options = countryList().getData();
-
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const handleSignUp = async (e) => {
     e.preventDefault();
 
@@ -28,12 +30,13 @@ const SignUp = () => {
         country,
         address,
         password,
-        // Add other fields as needed
+        role,
+       
       };
 
       const response = await axios.post('http://localhost:3000/users/create', newUser);
       console.log('User created:', response.data);
-
+      setShowSuccessAlert(true); 
       setFirstName('');
       setLastName('');
       setEmail('');
@@ -42,15 +45,21 @@ const SignUp = () => {
       setAddress('');
       setPassword('');
       setConfirmPassword('');
+   
     } catch (error) {
       console.error('Error creating user:', error);
      
     }
   };
 
+  const onCloseSuccessAlert = () => {
+    setShowSuccessAlert(false);
+  navigate('/login');
+  };
 
   return (
     <>
+     {showSuccessAlert && <SucessInscription onClose={onCloseSuccessAlert} />}
       <div className="font-[sans-serif]">
       <div className="h-[230px] font-[sans-serif]">
         <img src={travail} alt="Banner Image" className="w-full h-full object-cover" />

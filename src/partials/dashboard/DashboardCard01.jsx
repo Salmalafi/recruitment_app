@@ -10,13 +10,13 @@ function DashboardCard01() {
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+        const token = localStorage.getItem('token');
         const response = await axios.get('http://localhost:3000/applications', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setTotalApplications(response.data.length); // Assuming response.data is an array of applications
+        setTotalApplications(response.data.length);
       } catch (error) {
         console.error('Error fetching applications:', error);
       }
@@ -55,7 +55,7 @@ function DashboardCard01() {
         <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase mb-1">candidatures</div>
         <div className="flex items-start">
           <div className="text-2xl font-bold text-slate-800 dark:text-slate-100 mr-1">{totalApplications}</div>
-          <div className="text-xs font-semibold text-white px-1 bg-emerald-500 rounded-full">+49%</div>
+        { /* <div className="text-xs font-semibold text-white px-1 bg-emerald-500 rounded-full">+49%</div> */}
         </div>
       </div>
     </div>
