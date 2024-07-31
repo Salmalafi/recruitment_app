@@ -23,6 +23,18 @@ const Apply = ({ show, onClose, userId, offerId,  onApplicationSubmit }) => {
       console.error('userId or offerId is null or undefined');
    
     }
+    const logFormData = (formData) => {
+      for (let [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          console.log(`${key}: ${value.name}`); // Log file names
+        } else {
+          console.log(`${key}: ${value}`);
+        }
+      }
+    };
+    
+    // Inside handleUpload function
+    logFormData(formData);
     
     const token = localStorage.getItem('token');
   

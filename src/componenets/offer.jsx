@@ -195,12 +195,12 @@ const Offer = ({ _id, reference, title, fetchOffers, contractType, location, des
           )}
           {(userRole === 'admin' || userRole === 'HrAgent') && (
             <>
-              <Pencil size={20} className="mr-1 cursor-pointer" onClick={handleEditClick} />
-              <Trash2 size={20} className="mr-1 cursor-pointer" onClick={handleDeleteClick} />
+              <Pencil size={20} className="mr-1 cursor-pointer dark:text-black " onClick={handleEditClick} />
+              <Trash2 size={20} className="mr-1 cursor-pointer dark:text-black" onClick={handleDeleteClick} />
             </>
           )}
         </div>
-        <h2 className="text-xl font-bold mb-2 flex items-center flex-wrap">
+        <h2 className="text-xl font-bold mb-2 flex items-center flex-wrap dark:text-black">
           <Briefcase size={18} className="mr-1" />
           <span className="flex-1">{title}</span>
         </h2>
@@ -214,7 +214,7 @@ const Offer = ({ _id, reference, title, fetchOffers, contractType, location, des
           <FileText size={18} className="mr-2" /><strong>Type de contrat :</strong> {contractType}
         </p>
         <p className="text-gray-700 mb-2 flex items-center">
-          <Calendar size={18} className="mr-2" /><strong>Date Limite :</strong> {maxDate}
+          <Calendar size={18} className="mr-2 " /><strong>Date Limite :</strong> {maxDate}
         </p>
         <p className="text-gray-700 mb-2">
           {description}
@@ -258,14 +258,18 @@ const Offer = ({ _id, reference, title, fetchOffers, contractType, location, des
               </button>
             )
           ) : (
-            <p className="text-red-500">Expiré</p>
+            <span className="bg-red-500 px-5 py-1 text-[10px] text-white rounded absolute -top-7">Expiré</span>
           )}
           <button className="bg-buttonColor2 text-white px-4 mt-4 rounded-full hover:bg-buttonColor2 relative h-10"
            onClick={handleDetailsClick}>
             Voir détails
           </button>
         </div>
-        <span className="bg-green-500 px-5 py-1 text-[10px] text-white rounded absolute -top-7">New</span>
+        {!expired && (
+  <span className="bg-green-500 px-5 py-1 text-[10px] text-white rounded absolute -top-7">
+    New
+  </span>
+)}
       </div>
       {showApply &&  
       <Modal style={customStylesApply}  

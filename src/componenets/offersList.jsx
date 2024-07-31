@@ -68,7 +68,7 @@ const OffersList = ({ showOnlyFavorites }) => {
           placeholder="Search by job title or reference..."
           value={searchTerm}
           onChange={handleSearchChange}
-          className="border border-buttonColor2 p-2 rounded-full mr-2"
+          className="border dark:text-black border-buttonColor2 p-2 rounded-full mr-2"
           style={{ width: '500px' }}
         />
         <FilterButton />

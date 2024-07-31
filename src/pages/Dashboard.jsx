@@ -8,6 +8,7 @@ import WelcomeBanner from '../partials/dashboard/WelcomeBanner';
 import MyApplications from '../componenets/MyApplications'; 
 import { Route, Routes } from 'react-router-dom';
 import Favorites from '../componenets/Favorites';
+import Chat from './chat';
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -70,6 +71,7 @@ function Dashboard() {
         <Route exact path="/myapplications" element={<MyApplications />} />
         <Route exact path="/myapplications/:id" element={<MyApplications />} />
         <Route exact path="/favorites" element={<OffersList showOnlyFavorites={true} />} />
+        <Route path="/chat" element={<Chat/>} />
       </Routes>
           </div>
         </main>

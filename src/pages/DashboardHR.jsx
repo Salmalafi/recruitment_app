@@ -21,6 +21,8 @@ import { Route, Routes } from 'react-router-dom';
 import EditOfferForm from '../componenets/EditOffer';
 import OffersList from '../componenets/offersList';
 import Applications from '../componenets/Applications';
+import AllApplications from '../componenets/AllApplications';
+import Chat from './chat';
 
 function DashboardHR() {
   const [userData, setUserData] = useState({});
@@ -118,15 +120,13 @@ function DashboardHR() {
                 
                 } />
               <Route path="/edit/:id" element={
-                
-                
                 <>
-                 
                 <EditOfferForm/>
-                
                 </>
               }/>
               <Route path="/applications/:id" element={<Applications/>} />
+              <Route path="/applications" element={<AllApplications/>} />
+              <Route path="/chat" element={<Chat/>} />
             </Routes>
           </div>
         </main>

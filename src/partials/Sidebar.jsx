@@ -3,10 +3,12 @@ import { NavLink, useLocation } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode'; 
 import SidebarLinkGroup from './SidebarLinkGroup';
 import logo from '../assets/capgemini.png';
+import { useNavigate } from 'react-router-dom';
+
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const location = useLocation();
   const { pathname } = location;
-
+  const navigate = useNavigate();
   const trigger = useRef(null);
   const sidebar = useRef(null);
 
@@ -117,10 +119,6 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
               <span className="lg:hidden lg:sidebar-expanded:block 2xl:block">Pages</span>
             </h3>
             <ul className="mt-3">
-            
-              
-              {/* Job Board */}
-              
                     <React.Fragment>
                       <a
                         href="#0"
@@ -152,12 +150,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                               Job Board
                             </span>
                           </div>
-                          {/* Icon */}
-                          <div className="flex shrink-0 ml-2">
-                            <svg className={`w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 ${open && 'rotate-180'}`} viewBox="0 0 12 12">
-                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                            </svg>
-                          </div>
+                          
                         </div>
                       </a>
                       <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
@@ -203,41 +196,69 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
   </NavLink>
 </li>
  </ul>
-                      </div>
-                    </React.Fragment>
-               
-          
-              {/* Campaigns */}
-              <li className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${pathname.includes('/dashboard/myapplications') && 'bg-slate-900'}`}>
-              <NavLink
-              to="/dashboard/myapplications"
-              className={`block text-slate-200 truncate transition duration-150 ${
-                location.pathname.includes('/dashboard/myapplications') ? 'hover:text-slate-200' : 'hover:text-white'
-              }`}
-            >
-           
-             <div className="flex ml-1 items-center">
-                <svg className="shrink-0 h-6  w-7" viewBox="0 0 24 24">
-                  <path
-                    className={`fill-current ${location.pathname.includes('/dashboard/myapplications') ? 'text-indigo-500' : 'text-slate-600'}`}
-                    d="M20 7a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 0120 7zM4 23a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 014 23z"
-                  />
-                  <path
-                    className={`fill-current ${location.pathname.includes('/dashboard/myapplications') ? 'text-indigo-300' : 'text-slate-400'}`}
-                    d="M17 23a1 1 0 01-1-1 4 4 0 00-4-4 1 1 0 010-2 4 4 0 004-4 1 1 0 012 0 4 4 0 004 4 1 1 0 010 2 4 4 0 00-4 4 1 1 0 01-1 1zM7 13a1 1 0 01-1-1 4 4 0 00-4-4 1 1 0 110-2 4 4 0 004-4 1 1 0 112 0 4 4 0 004 4 1 1 0 010 2 4 4 0 00-4 4 1 1 0 01-1 1z"
-                  />
-                </svg>
-                <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                {userRole === 'HrAgent' ? 'All applications' : 'My applications'}
-                </span>
-              </div>
-          
-            </NavLink>
-
-</li>
-
-              {/* Settings */}
-              
+</div>
+  </React.Fragment>
+  <React.Fragment>
+    <a
+      href="#"
+      className={`block text-slate-200 truncate transition duration-150 ${pathname.includes('/dashboard/myapplications') ? 'hover:text-slate-200' : 'hover:text-white'}`}
+      onClick={(e) => {
+        e.preventDefault();
+        navigate(userRole === 'HrAgent' ? '/dashboardHR/applications' : '/dashboard/myapplications');
+      }}
+    >
+      <div className="flex items-center justify-between mt-1 mb-2">
+        <div className="flex items-center">
+          <svg className="shrink-0 h-6 w-6 mr-3" viewBox="0 0 24 24">
+            <path
+              className={`fill-current ${pathname.includes('/dashboard/myapplications') ? 'text-indigo-500' : 'text-slate-600'}`}
+              d="M20 7a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 0120 7zM4 23a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 014 23z"
+            />
+            <path
+              className={`fill-current ${pathname.includes('/dashboard/myapplications') ? 'text-indigo-300' : 'text-slate-400'}`}
+              d="M17 23a1 1 0 01-1-1 4 4 0 00-4-4 1 1 0 010-2 4 4 0 004-4 1 1 0 012 0 4 4 0 004 4 1 1 0 010 2 4 4 0 00-4 4 1 1 0 01-1 1zM7 13a1 1 0 01-1-1 4 4 0 00-4-4 1 1 0 110-2 4 4 0 004-4 1 1 0 112 0 4 4 0 004 4 1 1 0 010 2 4 4 0 00-4 4 1 1 0 01-1 1z"
+            />
+          </svg>
+          <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+            {userRole === 'HrAgent' ? 'All applications' : 'My applications'}
+          </span>
+        </div>
+      </div>
+    </a>
+  </React.Fragment> 
+  <React.Fragment>
+    <a
+      href="#0"
+      className={`block text-slate-200 truncate transition duration-150 ${open ? 'hover:text-slate-200' : 'hover:text-white'}`}
+      onClick={(e) => {
+        e.preventDefault();
+        // Navigate to the chat page
+        navigate('/dashboardHR/chat');
+        // If you still need to handle sidebar expansion, you can do so
+        sidebarExpanded ? handleClick() : setSidebarExpanded(true);
+      }}
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <svg className="shrink-0 h-6 w-6 mb-1 mt-1 " viewBox="0 0 24 24">
+            <path
+              className="fill-current text-slate-600"
+              d="M19 5h1v14h-2V7.414L5.707 19.707 5 19H4V5h2v11.586L18.293 4.293 19 5Z"
+            />
+            <path
+              className="fill-current text-slate-400"
+              d="M5 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm14 0a4 4 0 1 1 0-8 4 4 0 0 1 0 8ZM5 23a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm14 0a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"
+            />
+          </svg>
+          <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+            Messages
+          </span>
+        </div>
+      </div>
+    </a>
+ 
+  </React.Fragment>
+                
                     <React.Fragment>
                       <a
                         href="#0"
@@ -251,7 +272,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center">
-                            <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
+                            <svg className="shrink-0 h-6 w-6  mb-1 mt-1" viewBox="0 0 24 24">
                               <path
                                 className={`fill-current ${pathname.includes('settings') ? 'text-indigo-500' : 'text-slate-600'}`}
                                 d="M19.714 14.7l-7.007 7.007-1.414-1.414 7.007-7.007c-.195-.4-.298-.84-.3-1.286a3 3 0 113 3 2.969 2.969 0 01-1.286-.3z"
@@ -316,52 +337,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
            
               {/* Onboarding */}
               
-                    <React.Fragment>
-                      <a
-                        href="#0"
-                        className={`block text-slate-200 truncate transition duration-150 ${open ? 'hover:text-slate-200' : 'hover:text-white'}`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          sidebarExpanded ? handleClick() : setSidebarExpanded(true);
-                        }}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center">
-                            <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
-                              <path
-                                className="fill-current text-slate-600"
-                                d="M19 5h1v14h-2V7.414L5.707 19.707 5 19H4V5h2v11.586L18.293 4.293 19 5Z"
-                              />
-                              <path
-                                className="fill-current text-slate-400"
-                                d="M5 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm14 0a4 4 0 1 1 0-8 4 4 0 0 1 0 8ZM5 23a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm14 0a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z"
-                              />
-                            </svg>
-                            <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                              Onboarding
-                            </span>
-                          </div>
-                          {/* Icon */}
-                          <div className="flex shrink-0 ml-2">
-                            <svg className={`w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 ${open && 'rotate-180'}`} viewBox="0 0 12 12">
-                              <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                            </svg>
-                          </div>
-                        </div>
-                      </a>
-                      <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                        <ul className={`pl-9 mt-1 ${!open && 'hidden'}`}>
-                          <li className="mb-1 last:mb-0">
-                            <NavLink end to="/onboarding-01" className="block text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                              <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                Step 1
-                              </span>
-                            </NavLink>
-                          </li>
-                        </ul>
-                      </div>
-                    </React.Fragment>
-               
+                   
              
             </ul>
           </div>
