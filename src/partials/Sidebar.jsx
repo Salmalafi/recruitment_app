@@ -41,7 +41,15 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
    
       return '/dashboard'; 
     };
-
+   const getDashboardPathV2=() =>{
+    if (role === 'Candidate') {
+      return '/dashboard';
+    } else if (role === 'HrAgent') {
+      return '/dashboardHR';
+    }
+ 
+    return '/dashboardAdmin'; 
+    };
   useEffect(() => {
     const clickHandler = ({ target }) => {
       if (!sidebar.current || !trigger.current) return;
@@ -158,13 +166,13 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                         <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/dashboardHR/"
+                              to={getDashboardPathV2()}
                               className={({ isActive }) =>
                                 'block transition duration-150 truncate ' + (isActive ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-200')
                               }
                             >
                               <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                              {userRole === 'HrAgent' ? 'Dashboard' : null}
+                              {userRole === 'HrAgent' || userRole==="Admin" ? 'Dashboard' : null}
                               </span>
                             </NavLink>
                           </li>
@@ -185,26 +193,27 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
     <li className="mb-1 last:mb-0">
   <NavLink
     end
-    to={userRole === 'HrAgent' ? "/dashboardHR/addoffer" : "/dashboard/favorites"}
+    to={userRole === 'HrAgent' || userRole==="Admin" ? "/dashboardHR/addoffer" : "/dashboard/favorites"}
     className={({ isActive }) =>
       'block transition duration-150 truncate ' + (isActive ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-200')
     }
   >
     <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-      {userRole === 'HrAgent' ? 'Add Offer' : 'Favoris'}
+      {userRole === 'HrAgent' || userRole==="Admin" ? 'Add Offer' : 'Favoris'}
     </span>
   </NavLink>
 </li>
  </ul>
 </div>
   </React.Fragment>
+  
   <React.Fragment>
     <a
       href="#"
       className={`block text-slate-200 truncate transition duration-150 ${pathname.includes('/dashboard/myapplications') ? 'hover:text-slate-200' : 'hover:text-white'}`}
       onClick={(e) => {
         e.preventDefault();
-        navigate(userRole === 'HrAgent' ? '/dashboardHR/applications' : '/dashboard/myapplications');
+        navigate(userRole === 'HrAgent' || userRole==="Admin" ? '/dashboardHR/applications' : '/dashboard/myapplications');
       }}
     >
       <div className="flex items-center justify-between mt-1 mb-2">
@@ -220,21 +229,83 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
             />
           </svg>
           <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-            {userRole === 'HrAgent' ? 'All applications' : 'My applications'}
+            {userRole === 'HrAgent' || userRole==="Admin" ? 'All applications' : 'My applications'}
           </span>
         </div>
       </div>
     </a>
   </React.Fragment> 
   <React.Fragment>
+  {userRole === 'Admin' && (
+    <a
+      href="#"
+      className={`block text-slate-200 truncate transition duration-150 ${pathname.includes('/dashboard/myapplications') ? 'hover:text-slate-200' : 'hover:text-white'}`}
+      onClick={(e) => {
+        e.preventDefault();
+        navigate('/dashboardAdmin/users');
+      }}
+    >
+      <div className="flex items-center justify-between mt-1 mb-2">
+        <div className="flex items-center">
+          <svg className="shrink-0 h-6 w-6 mr-3" viewBox="0 0 24 24">
+            <path
+              className={`fill-current ${pathname.includes('/dashboard/myapplications') ? 'text-indigo-500' : 'text-slate-600'}`}
+              d="M20 7a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 0120 7zM4 23a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 014 23z"
+            />
+            <path
+              className={`fill-current ${pathname.includes('/dashboard/myapplications') ? 'text-indigo-300' : 'text-slate-400'}`}
+              d="M17 23a1 1 0 01-1-1 4 4 0 00-4-4 1 1 0 010-2 4 4 0 004-4 1 1 0 012 0 4 4 0 004 4 1 1 0 010 2 4 4 0 00-4 4 1 1 0 01-1 1zM7 13a1 1 0 01-1-1 4 4 0 00-4-4 1 1 0 110-2 4 4 0 004-4 1 1 0 112 0 4 4 0 004 4 1 1 0 010 2 4 4 0 00-4 4 1 1 0 01-1 1z"
+            />
+          </svg>
+          <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+      Candidates 
+          </span>
+        </div>
+      </div>
+    </a>
+  )}
+</React.Fragment>
+<React.Fragment>
+  {userRole === 'Admin' && (
+    <a
+      href="#"
+      className={`block text-slate-200 truncate transition duration-150 ${pathname.includes('/dashboard/myapplications') ? 'hover:text-slate-200' : 'hover:text-white'}`}
+      onClick={(e) => {
+        e.preventDefault();
+        navigate('/dashboardAdmin/HR');
+      }}
+    >
+      <div className="flex items-center justify-between mt-1 mb-2">
+        <div className="flex items-center">
+          <svg className="shrink-0 h-6 w-6 mr-3" viewBox="0 0 24 24">
+            <path
+              className={`fill-current ${pathname.includes('/dashboard/myapplications') ? 'text-indigo-500' : 'text-slate-600'}`}
+              d="M20 7a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 0120 7zM4 23a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 014 23z"
+            />
+            <path
+              className={`fill-current ${pathname.includes('/dashboard/myapplications') ? 'text-indigo-300' : 'text-slate-400'}`}
+              d="M17 23a1 1 0 01-1-1 4 4 0 00-4-4 1 1 0 010-2 4 4 0 004-4 1 1 0 012 0 4 4 0 004 4 1 1 0 010 2 4 4 0 00-4 4 1 1 0 01-1 1zM7 13a1 1 0 01-1-1 4 4 0 00-4-4 1 1 0 110-2 4 4 0 004-4 1 1 0 112 0 4 4 0 004 4 1 1 0 010 2 4 4 0 00-4 4 1 1 0 01-1 1z"
+            />
+          </svg>
+          <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+      HR agents
+          </span>
+        </div>
+      </div>
+    </a>
+  )}
+</React.Fragment>
+  <React.Fragment>
     <a
       href="#0"
       className={`block text-slate-200 truncate transition duration-150 ${open ? 'hover:text-slate-200' : 'hover:text-white'}`}
-      onClick={(e) => {
-        e.preventDefault();
-        // Navigate to the chat page
-        navigate('/dashboardHR/chat');
-        // If you still need to handle sidebar expansion, you can do so
+      onClick={(e) => {e.preventDefault();
+        if (userRole === 'HrAgent' || userRole==="Admin" ) {
+          navigate('/dashboardHR/chat');
+        } else {
+          navigate('/dashboard/chat');
+        }
+      
         sidebarExpanded ? handleClick() : setSidebarExpanded(true);
       }}
     >
@@ -303,13 +374,13 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                           <li className="mb-1 last:mb-0">
                             <NavLink
                               end
-                              to="/settings/account"
+                              to="/dashboard/changePassword"
                               className={({ isActive }) =>
                                 'block transition duration-150 truncate ' + (isActive ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-200')
                               }
                             >
                               <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                My Account
+                            Change Password 
                               </span>
                             </NavLink>
                           </li>

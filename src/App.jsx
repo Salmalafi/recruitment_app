@@ -1,6 +1,6 @@
 // src/App.jsx
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, useLocation, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route,useNavigate, useLocation, Routes } from 'react-router-dom';
 import './css/style.css';
 import './charts/ChartjsConfig';
 import recrutementImage from './assets/recrutement2.jpg';
@@ -18,6 +18,8 @@ import * as PDFJS from 'pdfjs-dist'
 import 'pdfjs-dist/web/pdf_viewer.css';
 import ForgotPasswordStepper from './componenets/ForgotPasswordStepper';
 import DashboardHR from './pages/DashboardHR';
+import Testimonials from './componenets/testimonals';
+import DashboardAdmin from './pages/DashboardAdmin';
 PDFJS.GlobalWorkerOptions.workerSrc ='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 
@@ -79,6 +81,7 @@ const App = () => {
         
           <Route path="/dashboard/*" element={<Dashboard />} />
           <Route path="/dashboardHR/*" element={<DashboardHR/>} />
+          <Route path="/dashboardAdmin/*" element={<DashboardAdmin/>} />
           <Route path="/" element={
             <>
               <Navbar /> 
@@ -103,6 +106,7 @@ const App = () => {
           <Route path="/signinwithlinkedin" element={<SignInWithLinkedIn />} />
           <Route path="/equipe" element={<Equipe />} />
           <Route path="/about" element={<About />} />
+          <Route path="/testimonals" element={<Testimonials/>} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/resetpassword" element={<>
             <Navbar />

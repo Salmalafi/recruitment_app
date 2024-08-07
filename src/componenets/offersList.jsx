@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Offer from './offer';
-import FilterButton from '../componenets/DropdownFilter';
+import FilterButton from './DropdownFilter';
 
 const OffersList = ({ showOnlyFavorites }) => {
   const [offers, setOffers] = useState([]);
@@ -9,6 +9,35 @@ const OffersList = ({ showOnlyFavorites }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [contractFilter, setContractFilter] = useState('all');
   const [typeContrat, setTypeContrat] = useState('all');
+
+  const [typesContrats, setTypesContrats] = useState({
+    CDD: false,
+    CDI: false,
+    Freelance: false,
+    Stage: false,
+    Apprentissage: false,
+  });
+
+  const [rythmesTravail, setRythmesTravail] = useState({
+    Présentiel: false,
+    Hybride: false,
+    Télétravail: false,
+  });
+
+  const [datePublication, setDatePublication] = useState({
+    'Moins d\'une semaine': false,
+    'Moins d\'un mois': false,
+    'Moins de trois mois': false,
+    'Plus de trois mois': false,
+  });
+
+  const [experiencesExigees, setExperiencesExigees] = useState({
+    Débutant: false,
+    Junior: false,
+    Confirmé: false,
+    Expert: false,
+    Senior: false,
+  });
 
   const fetchOffers = async () => {
     try {
@@ -44,12 +73,26 @@ const OffersList = ({ showOnlyFavorites }) => {
     setSearchTerm(normalizedSearchTerm.toLowerCase());
   };
 
-  const handleContractFilterChange = (event) => {
-    setContractFilter(event.target.value);
-  };
+  const isFilterApplied = (filters) => Object.values(filters).some(value => value);
 
-  const handleTypeContratChange = (event) => {
-    setTypeContrat(event.target.value);
+  const filterByDatePublication = (offer) => {
+    const today = new Date();
+    const offerDate = new Date(offer.createdAt);
+
+    if (datePublication["Moins d'une semaine"] && ((today - offerDate) / (1000 * 60 * 60 * 24)) <= 7) {
+      return true;
+    }
+    if (datePublication["Moins d'un mois"] && ((today - offerDate) / (1000 * 60 * 60 * 24)) <= 30) {
+      return true;
+    }
+    if (datePublication["Moins de trois mois"] && ((today - offerDate) / (1000 * 60 * 60 * 24)) <= 90) {
+      return true;
+    }
+    if (datePublication["Plus de trois mois"] && ((today - offerDate) / (1000 * 60 * 60 * 24)) > 90) {
+      return true;
+    }
+
+    return false;
   };
 
   const filteredOffers = offers.filter((offer) => {
@@ -57,7 +100,14 @@ const OffersList = ({ showOnlyFavorites }) => {
     const contractFilterMatches = contractFilter === 'all' || offer.contractType === contractFilter;
     const typeContratMatches = typeContrat === 'all' || offer.typeContrat === typeContrat;
     const favoriteFilterMatches = !showOnlyFavorites || favorites.includes(offer._id);
-    return titleMatches && contractFilterMatches && typeContratMatches && favoriteFilterMatches;
+
+    const typesContratsMatches = !isFilterApplied(typesContrats) || Object.keys(typesContrats).some(key => typesContrats[key] && offer.contractType === key);
+    const rythmesTravailMatches = !isFilterApplied(rythmesTravail) || Object.keys(rythmesTravail).some(key => rythmesTravail[key] && offer.rythme === key);
+    const datePublicationMatches = !isFilterApplied(datePublication) || filterByDatePublication(offer);
+    const experiencesExigeesMatches = !isFilterApplied(experiencesExigees) || Object.keys(experiencesExigees).some(key => experiencesExigees[key] && offer.experience === key);
+
+    return titleMatches && contractFilterMatches && typeContratMatches && favoriteFilterMatches &&
+      typesContratsMatches && rythmesTravailMatches && datePublicationMatches && experiencesExigeesMatches;
   });
 
   return (
@@ -71,7 +121,16 @@ const OffersList = ({ showOnlyFavorites }) => {
           className="border dark:text-black border-buttonColor2 p-2 rounded-full mr-2"
           style={{ width: '500px' }}
         />
-        <FilterButton />
+        <FilterButton
+          typesContrats={typesContrats}
+          setTypesContrats={setTypesContrats}
+          rythmesTravail={rythmesTravail}
+          setRythmesTravail={setRythmesTravail}
+          datePublication={datePublication}
+          setDatePublication={setDatePublication}
+          experiencesExigees={experiencesExigees}
+          setExperiencesExigees={setExperiencesExigees}
+        />
       </div>
 
       <div className="grid grid-cols-1 p-8 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -89,6 +148,7 @@ const OffersList = ({ showOnlyFavorites }) => {
             jobDescription={offer.jobDescription}
             profilCherche={offer.profilCherche}
             whatWeOffer={offer.whatWeOffer}
+            rythme={offer.rythme}
             skillsRequired={offer.skillsRequired}
             experience={offer.experience}
             createdAt={offer.createdAt}
@@ -102,6 +162,8 @@ const OffersList = ({ showOnlyFavorites }) => {
 };
 
 export default OffersList;
+
+
 
 
 

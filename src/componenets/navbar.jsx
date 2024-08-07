@@ -23,6 +23,7 @@ const Navbar = () => {
           <li><a href="/" className="text-white">Accueil</a></li>
           <li><a href="/equipe" className="text-white">Equipe</a></li>
           <li><a href="/about" className="text-white">À propos</a></li>
+          <li><a href="/testimonals" className="text-white">Témoignages</a></li>
           <li>
             <button className="text-white px-3 py-1 rounded-full hover:bg-buttonColor1 hover:text-white" onClick={handleLoginClick}>
               Se connecter

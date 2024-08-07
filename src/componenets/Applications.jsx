@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { CircleCheck, CircleX } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { CircleCheck, CircleX, MessageCircleMore } from 'lucide-react';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
+
 const Applications = () => {
     const [applications, setApplications] = useState([]);
     const [users, setUsers] = useState({});
     const { id } = useParams();
+ 
     const token = localStorage.getItem('token');
+    const navigate = useNavigate(); 
     useEffect(() => {
         const fetchApplications = async () => {
             try {
-                const token = localStorage.getItem('token');
-
                 const response = await axios.get(
                     `http://localhost:3000/applications/offer/${id}`,
                     {
@@ -22,7 +24,6 @@ const Applications = () => {
                         },
                     }
                 );
-
                 setApplications(response.data);
             } catch (error) {
                 console.error('Error fetching applications:', error);
@@ -40,7 +41,6 @@ const Applications = () => {
                 const response = await axios.get(
                     `http://localhost:3000/users/${userId}`
                 );
-
                 setUsers((prevUsers) => ({
                     ...prevUsers,
                     [userId]: response.data,
@@ -52,6 +52,7 @@ const Applications = () => {
                 }
             }
         };
+
         applications.forEach((application) => {
             if (application.userId && !users[application.userId]) {
                 fetchUserDetails(application.userId);
@@ -61,8 +62,6 @@ const Applications = () => {
 
     const updateApplicationStatus = async (applicationId, newStatus) => {
         try {
-            const token = localStorage.getItem('token');
-
             await axios.patch(
                 `http://localhost:3000/applications/${applicationId}`,
                 { status: newStatus },
@@ -72,7 +71,6 @@ const Applications = () => {
                     },
                 }
             );
-
             setApplications((prevApplications) =>
                 prevApplications.map((application) =>
                     application._id === applicationId
@@ -110,23 +108,10 @@ const Applications = () => {
         }
     };
 
-    const getStatusText = (status) => {
-        switch (status) {
-            case 'PENDING':
-                return '1st Interview';
-            case 'Accepted for 1st Interview':
-                return 'In-Depth Interview';
-                case 'Accepted for In-Depth Interview':
-                    return 'Hired';
-            default:
-                return '';
-        }
-    };
-
     const renderActions = (status, applicationId) => {
-        switch (status) {
-            case 'PENDING':
-                return (
+        return (
+            <div>
+                {status === 'PENDING' && (
                     <div>
                         <div className="text-sm text-gray-700">1st Interview:</div>
                         <div className="flex space-x-2 items-center mt-2">
@@ -144,9 +129,8 @@ const Applications = () => {
                             </button>
                         </div>
                     </div>
-                );
-            case 'Accepted for 1st Interview':
-                return (
+                )}
+                {status === 'Accepted for 1st Interview' && (
                     <div>
                         <div className="text-sm text-gray-700">In-Depth Interview:</div>
                         <div className="flex space-x-2 items-center mt-2">
@@ -164,11 +148,10 @@ const Applications = () => {
                             </button>
                         </div>
                     </div>
-                );
-            case 'Accepted for In-Depth Interview':
-                return (
+                )}
+                {status === 'Accepted for In-Depth Interview' && (
                     <div>
-                        <div className="text-sm justify-center text-gray-700">Hire</div>
+                        <div className="text-sm justify-center text-gray-700">Hire:</div>
                         <div className="flex space-x-2 items-center mt-2">
                             <button
                                 className="text-green-500 focus:outline-none"
@@ -184,17 +167,28 @@ const Applications = () => {
                             </button>
                         </div>
                     </div>
-                );
-            case 'Hired':
-                return null;
-            case 'Declined':
-            case 'Declined for Next Step':
-                return null;
-            default:
-                return null;
-        }
+                )}
+            </div>
+        );
     };
-    
+
+    const renderChatIcon = (status, userId) => {
+        return (
+            status.includes('Accepted') && (
+                <div className="flex items-center justify-center">
+                    <button
+                        className="text-blue-500 focus:outline-none"
+                        onClick={() => goToChatPage(userId)} 
+                    >
+                    <MessageCircleMore size={30} />
+                    </button>
+                </div>
+            )
+        );
+    };
+    const goToChatPage = (userId) => {
+        navigate('/dashboardHR/chat', { state: { userId } });
+      };
     return (
         <div className="font-sans overflow-x-auto">
             <table className="min-w-full bg-white">
@@ -221,12 +215,15 @@ const Applications = () => {
                         <th className="p-4 text-left text-sm font-semibold text-gray-800">
                             Actions
                         </th>
+                        <th className="p-4 text-left text-sm font-semibold text-gray-800">
+                         
+                        </th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                     {applications.map((application) => (
                         <tr key={application._id} className="text-gray-700">
-                            <td className="p-4 max-w-[100px] break-words">
+                            <td className="p-4 max-w-[100px]  text-xs break-words">
                                 {application._id}
                             </td>
                             <td className="p-4 text-sm text-gray-800">
@@ -237,23 +234,22 @@ const Applications = () => {
                                 </span>
                             </td>
                             <td className="p-4 text-sm font-semibold text-gray-800">
-    <div className="flex items-center">
-        <Viewer
-            fileUrl={`http://localhost:3000/applications/resume/${application.resume}`}
-            httpHeaders={{ Authorization: `Bearer ${token}` }}
-            defaultScale={0.05}
-            hideRotation
-        />
-        <div className="w-3"></div>
-        <button
-            className="bg-buttonColor2 hover:bg-blue-700 text-gray-900 h-8 w-20 font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
-            onClick={() => downloadFile(`http://localhost:3000/applications/resume/${application.resume}`)}
-        >
-            Download
-        </button>
-    </div>
-</td>
-
+                                <div className="flex items-center">
+                                    <Viewer
+                                        fileUrl={`http://localhost:3000/applications/resume/${application.resume}`}
+                                        httpHeaders={{ Authorization: `Bearer ${token}` }}
+                                        defaultScale={0.05}
+                                        hideRotation
+                                    />
+                                    <div className="w-3"></div>
+                                    <button
+                                        className="bg-buttonColor2 hover:bg-blue-700 text-gray-900 h-8 w-20 font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                                        onClick={() => downloadFile(`http://localhost:3000/applications/resume/${application.resume}`)}
+                                    >
+                                        Download
+                                    </button>
+                                </div>
+                            </td>
                             <td className="p-4">
                                 {users[application.userId] ? (
                                     `${users[application.userId].firstName} ${users[application.userId].lastName}`
@@ -285,6 +281,9 @@ const Applications = () => {
                             <td className="p-4">
                                 {renderActions(application.status, application._id)}
                             </td>
+                            <td className="p-4">
+                                {renderChatIcon(application.status, application.userId)}
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -294,3 +293,5 @@ const Applications = () => {
 };
 
 export default Applications;
+
+

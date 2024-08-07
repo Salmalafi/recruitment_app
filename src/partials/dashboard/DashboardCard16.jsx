@@ -4,7 +4,7 @@ import Tooltip from '../../componenets/Tooltip';
 import RealtimeChart from '../../charts/RealtimeChart';
 import { tailwindConfig, hexToRGB } from '../../utils/Utils';
 
-function DashboardCard05() {
+function DashboardCard16() {
   const [chartData, setChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,17 +13,16 @@ function DashboardCard05() {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:3000/users', {
+        const response = await axios.get('http://localhost:3000/applications', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         const users = response.data;
-
-        // Convert and format dates for chart
+t
         const groupedByDate = users.reduce((acc, user) => {
-          const date = new Date(user.createdAt); // Assuming createdAt is the field name for user creation date
-          const formattedDate = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+          const date = new Date(user.date); 
+          const formattedDate = date.toISOString().split('T')[0]; 
 
           acc[formattedDate] = (acc[formattedDate] || 0) + 1;
           return acc;
@@ -74,8 +73,8 @@ function DashboardCard05() {
   return (
     <div className="flex flex-col col-span-full sm:col-span-6 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
       <header className="px-5 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center">
-        <h2 className="font-semibold text-slate-800 dark:text-slate-100">Users Created per Day</h2>
-      
+        <h2 className="font-semibold text-slate-800 dark:text-slate-100">Applications received per Day</h2>
+       
       </header>
       <div className="p-5">
         <RealtimeChart data={chartData} width={595} height={248} />
@@ -84,5 +83,4 @@ function DashboardCard05() {
   );
 }
 
-export default DashboardCard05;
-
+export default DashboardCard16;

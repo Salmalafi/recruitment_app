@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const Favorites = () => {
   const [userId, setUserId] = useState(null);
   const [favorites, setFavorites] = useState([]); 
-  const [offers, setOffers] = useState([]); // State to hold detailed offers
+  const [offers, setOffers] = useState([]);
   const navigate = useNavigate(); 
 
   useEffect(() => {

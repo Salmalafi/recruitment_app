@@ -1,7 +1,6 @@
 import React from 'react';
 import BarChart from '../../charts/BarChart03';
 
-// Import utilities
 import { tailwindConfig } from '../../utils/Utils';
 
 function DashboardCard11() {
@@ -63,9 +62,9 @@ function DashboardCard11() {
           <div className="text-sm font-semibold text-white px-1.5 bg-yellow-500 rounded-full">-22%</div>
         </div>
       </div>
-      {/* Chart built with Chart.js 3 */}
+    
       <div className="grow">
-        {/* Change the height attribute to adjust the chart height */}
+      
         <BarChart data={chartData} width={595} height={48} />
       </div>
     </div>

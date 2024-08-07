@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode'; // Ensure correct import syntax
+import {jwtDecode} from 'jwt-decode'; 
 import recrutement from '../assets/Resume-amico.png';
 import linkedin from '../assets/linkedin_icon.png';
 
@@ -49,7 +49,7 @@ const Login = () => {
         const { access_token } = response.data;
         localStorage.setItem('token', access_token);
 
-        const decodedToken = jwtDecode(access_token); // Correct usage
+        const decodedToken = jwtDecode(access_token);
         localStorage.setItem('userEmail', decodedToken.email);
         localStorage.setItem('userRole', decodedToken.roles);
 
@@ -57,6 +57,8 @@ const Login = () => {
           navigate('/dashboard');
         } else if (decodedToken.roles === 'HrAgent') {
           navigate('/dashboardHR');
+        } else if (decodedToken.roles === 'Admin') {
+          navigate('/dashboardAdmin');
         }
       } catch (error) {
         console.error('Login error:', error);

@@ -23,12 +23,18 @@ import OffersList from '../componenets/offersList';
 import Applications from '../componenets/Applications';
 import AllApplications from '../componenets/AllApplications';
 import Chat from './chat';
+import DashboardCard14 from '../partials/dashboard/DashboardCard14';
+import DashboardCard15 from '../partials/dashboard/DashboardCard15';
+import MinimalChart from '../charts/MinimalChart';
+import DashboardCard16 from '../partials/dashboard/DashboardCard16';
+import UsersTable from '../componenets/ManageCandidates';
+import HrAgentTable from '../componenets/ManageHR';
 
-function DashboardHR() {
+function DashboardAdmin() {
   const [userData, setUserData] = useState({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [offersWithExpiry, setOffersWithExpiry] = useState([]);
-  
+  const [data, setData] = useState(null);
   const handleAlert = (type, message) => {
     setAlert({ type, message });
     
@@ -68,10 +74,28 @@ function DashboardHR() {
 
     fetchUserData();
   }, []);
+  useEffect(() => {
+   
+    const fetchData = () => {
+     
+      const mockData = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [{
+          label: 'Sample Data',
+          data: [65, 59, 80, 81, 56, 55, 40],
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
+        }]
+      };
+      setData(mockData);
+    };
+    fetchData();
+}, []);
 
   return (
     <div className="flex h-screen overflow-hidden">
-  
+    
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
@@ -80,9 +104,9 @@ function DashboardHR() {
 
         <main>
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-         
+           
             <Routes>
-         
+           
               <Route path="/" element={
                 <>
  <WelcomeBanner align="right" role={userData.role} lastName={userData.lastName} firstName={userData.firstName} />
@@ -92,14 +116,21 @@ function DashboardHR() {
                   <DashboardCard02 />
                   <DashboardCard03 />
                   <DashboardCard04 />
-            
-                  <DashboardCard07 />
-                
+                  <DashboardCard14/>
+                  <DashboardCard15/>
+                  <DashboardCard05/>
+                  <DashboardCard16/>
+                   <DashboardCard06 />
+                   <DashboardCard07 />
+                  
+                     
+              
                 
                 </div>
                 </>
               } />
 
+             
               <Route path="/addoffer" element={<AddOfferForm />} />
               <Route path="/offers" element={
                 <>
@@ -116,6 +147,8 @@ function DashboardHR() {
               }/>
               <Route path="/applications/:id" element={<Applications/>} />
               <Route path="/applications" element={<AllApplications/>} />
+              <Route path="/users" element={<UsersTable/>} />
+              <Route path="/HR" element={<HrAgentTable/>} />
               <Route path="/chat" element={<Chat/>} />
             </Routes>
           </div>
@@ -125,6 +158,5 @@ function DashboardHR() {
   );
 }
 
-export default DashboardHR;
-
+export default DashboardAdmin;
 

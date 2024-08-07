@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { CircleCheck, CircleX } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { CircleCheck, CircleX, MessageCircleMore } from 'lucide-react'; // Import MessageSquare
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 
@@ -13,7 +14,7 @@ const AllApplications = () => {
     const [priorityOrder, setPriorityOrder] = useState('none'); // 'none', 'highest', or 'lowest'
     const [searchTerm, setSearchTerm] = useState('');
     const token = localStorage.getItem('token');
- const isDeclined="False";
+    const navigate = useNavigate(); 
     useEffect(() => {
         const fetchApplications = async () => {
             try {
@@ -77,24 +78,25 @@ const AllApplications = () => {
 
     const downloadFile = async (resumeUrl) => {
         try {
-          const response = await axios.get(resumeUrl, {
-            responseType: 'blob', 
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-    
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', 'resume.pdf');
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+            const response = await axios.get(resumeUrl, {
+                responseType: 'blob',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'resume.pdf');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         } catch (error) {
-          console.error('Error downloading file:', error);
+            console.error('Error downloading file:', error);
         }
-      };
+    };
+
     useEffect(() => {
         if (selectedOffer && priorityOrder !== 'none') {
             const fetchSortedByPriority = async () => {
@@ -165,7 +167,6 @@ const AllApplications = () => {
                 break;
             case 'decline':
                 updateApplicationStatus(applicationId, 'Declined for Next Step');
-                
                 break;
             default:
                 break;
@@ -184,7 +185,9 @@ const AllApplications = () => {
                 return '';
         }
     };
-
+    const goToChatPage = (userId) => {
+        navigate('/dashboardHR/chat', { state: { userId } });
+      };
     const renderActions = (status, applicationId) => {
         switch (status) {
             case 'PENDING':
@@ -301,7 +304,7 @@ const AllApplications = () => {
                     ))}
                 </select>
             </div>
-            <div className="p-4 flex ">
+            <div className="p-4 flex">
                 <input
                     type="text"
                     placeholder="Search..."
@@ -309,34 +312,33 @@ const AllApplications = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="py-2 px-10 mr-20 border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
-               <div className="flex justify-end mr-1">
-    <button
-        onClick={() => setSortOrder(sortOrder === 'newest' ? 'oldest' : 'newest')}
-        className="py-2 px-4 bg-buttonColor5 mr-20 rounded-full text-black  shadow-sm mr-2"
-    >
-        Sort by {sortOrder === 'newest' ? 'Oldest' : 'Newest'}
-    </button>
-    <button
-        onClick={() => setPriorityOrder(priorityOrder === 'highest' ? 'lowest' : 'highest')}
-        className="py-2 px-4 bg-buttonColor2 text-black rounded-full  shadow-sm"
-    >
-        Sort by Priority {priorityOrder === 'highest' ? 'Lowest' : 'Highest'}
-    </button>
-</div>
-
+                <div className="flex justify-end mr-1">
+                    <button
+                        onClick={() => setSortOrder(sortOrder === 'newest' ? 'oldest' : 'newest')}
+                        className="py-2 px-4 bg-buttonColor5 mr-20 rounded-full text-black shadow-sm mr-2"
+                    >
+                        Sort by {sortOrder === 'newest' ? 'Oldest' : 'Newest'}
+                    </button>
+                    <button
+                        onClick={() => setPriorityOrder(priorityOrder === 'highest' ? 'lowest' : 'highest')}
+                        className="py-2 px-4 bg-buttonColor2 text-black rounded-full shadow-sm"
+                    >
+                        Sort by Priority {priorityOrder === 'highest' ? 'Lowest' : 'Highest'}
+                    </button>
+                </div>
             </div>
             <table className="min-w-full bg-white">
                 <thead className="whitespace-nowrap">
                     <tr>
                         <th className="p-4 text-left text-sm font-semibold text-gray-800">Date</th>
                         <th className="p-4 text-left text-sm font-semibold text-gray-800">Status</th>
-                     
                         <th className="p-4 text-left text-sm font-semibold text-gray-800">Resume</th>
                         <th className="p-4 text-left text-sm font-semibold text-gray-800">Candidate Name</th>
                         <th className="p-4 text-left text-sm font-semibold text-gray-800">Email</th>
                         <th className="p-4 text-left text-sm font-semibold text-gray-800">Phone</th>
                         <th className="p-4 text-left text-sm font-semibold text-gray-800">Actions</th>
                         <th className="p-4 text-left text-sm font-semibold text-gray-800">Score</th> {/* New column */}
+                        <th className="p-4 text-left text-sm font-semibold text-gray-800">Chat</th> {/* New column */}
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -350,26 +352,23 @@ const AllApplications = () => {
                                     {application.status}
                                 </span>
                             </td>
-                         
                             <td className="p-4 text-sm font-semibold text-gray-800">
-  <div className="flex flex-col items-center">
-    <Viewer
-      fileUrl={`http://localhost:3000/applications/resume/${application.resume}`}
-      httpHeaders={{ Authorization: `Bearer ${token}` }}
-      renderError={() => <div>Error loading PDF</div>}
-      renderLoading={() => <div>Loading PDF...</div>}
-      defaultScale={0.15}
-    
-    />
-    <button
-      className="bg-buttonColor2 hover:bg-blue-700 text-gray-900 h-8 w-20 font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2"
-   onClick={() => downloadFile(`http://localhost:3000/applications/resume/${application.resume}`)}
-    >
-      Download
-    </button>
-  </div>
-</td>
-
+                                <div className="flex flex-col items-center">
+                                    <Viewer
+                                        fileUrl={`http://localhost:3000/applications/resume/${application.resume}`}
+                                        httpHeaders={{ Authorization: `Bearer ${token}` }}
+                                        renderError={() => <div>Error loading PDF</div>}
+                                        renderLoading={() => <div>Loading PDF...</div>}
+                                        defaultScale={0.15}
+                                    />
+                                    <button
+                                        className="bg-buttonColor2 hover:bg-blue-700 text-gray-900 h-8 w-20 font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2"
+                                        onClick={() => downloadFile(`http://localhost:3000/applications/resume/${application.resume}`)}
+                                    >
+                                        Download
+                                    </button>
+                                </div>
+                            </td>
                             <td className="p-4 max-w-[100px] break-words">
                                 {users[application.userId] && users[application.userId].firstName}{' '}
                                 {users[application.userId] && users[application.userId].lastName}
@@ -383,8 +382,18 @@ const AllApplications = () => {
                             <td className="p-4 max-w-[150px] break-words">
                                 {renderActions(application.status, application._id)}
                             </td>
-                            <td className="p-4 text-sm text-gray-800"> {/* Score column */}
+                            <td className="p-4 text-sm text-gray-800">
                                 {application.score }
+                            </td>
+                            <td className="p-4 text-center">
+                                {application.status.includes('Accepted') && (
+                                    <button
+                                    className="text-blue-500 focus:outline-none"
+                                    onClick={() => goToChatPage(application.userId)} 
+                                >
+                                <MessageCircleMore size={30} />
+                                </button>
+                                )}
                             </td>
                         </tr>
                     ))}
@@ -395,3 +404,4 @@ const AllApplications = () => {
 };
 
 export default AllApplications;
+

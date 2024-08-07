@@ -26,7 +26,7 @@ const Apply = ({ show, onClose, userId, offerId,  onApplicationSubmit }) => {
     const logFormData = (formData) => {
       for (let [key, value] of formData.entries()) {
         if (value instanceof File) {
-          console.log(`${key}: ${value.name}`); // Log file names
+          console.log(`${key}: ${value.name}`); 
         } else {
           console.log(`${key}: ${value}`);
         }

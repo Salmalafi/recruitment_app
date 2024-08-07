@@ -6,7 +6,7 @@ import Apply from './Apply';
 import OfferDetails from './OfferDetails';
 import Modal from "react-modal";
 
-const Offer = ({ _id, reference, title, fetchOffers, contractType, location, description, maxDate, expired, jobDescription, profilCherche, skillsRequired, experience, whatWeOffer, createdAt, onApplicationSubmit }) => {
+const Offer = ({ _id, reference, title, fetchOffers,rythme, contractType, location, description, maxDate, expired, jobDescription, profilCherche, skillsRequired, experience, whatWeOffer, createdAt, onApplicationSubmit }) => {
   const [showApply, setShowApply] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [userId, setUserId] = useState(null);

@@ -58,10 +58,9 @@ function DashboardCard10() {
       </header>
       <div className="p-3">
 
-        {/* Table */}
         <div className="overflow-x-auto">
           <table className="table-auto w-full">
-            {/* Table header */}
+        
             <thead className="text-xs font-semibold uppercase text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-700 dark:bg-opacity-50">
               <tr>
                 <th className="p-2 whitespace-nowrap">
@@ -78,7 +77,7 @@ function DashboardCard10() {
                 </th>
               </tr>
             </thead>
-            {/* Table body */}
+         
             <tbody className="text-sm divide-y divide-slate-100 dark:divide-slate-700">
               {
                 customers.map(customer => {

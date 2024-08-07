@@ -9,6 +9,8 @@ import MyApplications from '../componenets/MyApplications';
 import { Route, Routes } from 'react-router-dom';
 import Favorites from '../componenets/Favorites';
 import Chat from './chat';
+import CandidateChat from './CandidateChat';
+import ChangePassword from '../componenets/ChangePassword';
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -71,7 +73,8 @@ function Dashboard() {
         <Route exact path="/myapplications" element={<MyApplications />} />
         <Route exact path="/myapplications/:id" element={<MyApplications />} />
         <Route exact path="/favorites" element={<OffersList showOnlyFavorites={true} />} />
-        <Route path="/chat" element={<Chat/>} />
+        <Route exact path="/changePassword" element={<ChangePassword />} />
+        <Route path="/chat" element={<CandidateChat/>} />
       </Routes>
           </div>
         </main>

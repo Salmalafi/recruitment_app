@@ -33,9 +33,9 @@ function DashboardCard07() {
           };
         }));
 
-        // Sort applications by date in descending order and limit to the latest 20 applications
+        // Sort applications by date in descending order and limit to the latest 10 applications
         applicationsData.sort((a, b) => b.applicationDate - a.applicationDate);
-        const latestApplications = applicationsData.slice(0, 20);
+        const latestApplications = applicationsData.slice(0, 10);
 
         setApplications(latestApplications);
       } catch (error) {
@@ -52,8 +52,14 @@ function DashboardCard07() {
 
   return (
     <div className="col-span-full xl:col-span-8 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-      <header className="px-5 py-4 border-b border-slate-100 dark:border-slate-700">
+      <header className="px-5 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">Latest Applications</h2>
+        <button
+          onClick={() => window.location.href = '/dashboardHR/applications'}
+          className="px-4 py-1 bg-blue rounded-full text-whiterounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300 ease-in-out transform hover:scale-105"
+        >
+          View All
+        </button>
       </header>
       <div className="p-3">
         {/* Table */}
@@ -113,4 +119,3 @@ function DashboardCard07() {
 }
 
 export default DashboardCard07;
-

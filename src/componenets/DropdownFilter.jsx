@@ -1,33 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Transition from '../utils/Transition';
 
-function DropdownFilter({ align }) {
+function DropdownFilter({
+  typesContrats,
+  setTypesContrats,
+  rythmesTravail,
+  setRythmesTravail,
+  datePublication,
+  setDatePublication,
+  experiencesExigees,
+  setExperiencesExigees,
+  align
+}) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [typesContrats, setTypesContrats] = useState({
-    CDD: false,
-    CDI: false,
-    Freelance: false,
-    Stage: false,
-    Apprentissage: false
-  });
-  const [rythmesTravail, setRythmesTravail] = useState({
-    'Temps-plein': false,
-    'Temps-partiel': false,
-    Télétravail: false
-  });
-  const [datePublication, setDatePublication] = useState({
-    'Moins d\'une semaine': false,
-    'Moins d\'un mois': false,
-    'Moins de trois mois': false,
-    'Plus de trois mois': false
-  });
-  const [experiencesExigees, setExperiencesExigees] = useState({
-    Débutant: false,
-    Junior: false,
-    Confirmé: false,
-    Expert: false,
-    Senior: false
-  });
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
@@ -57,31 +42,30 @@ function DropdownFilter({ align }) {
       CDI: false,
       Freelance: false,
       Stage: false,
-      Apprentissage: false
+      Apprentissage: false,
     });
     setRythmesTravail({
-      'Temps-plein': false,
-      'Temps-partiel': false,
-      Télétravail: false
+      Présentiel: false,
+      Hybride: false,
+      Télétravail: false,
     });
     setDatePublication({
       'Moins d\'une semaine': false,
       'Moins d\'un mois': false,
       'Moins de trois mois': false,
-      'Plus de trois mois': false
+      'Plus de trois mois': false,
     });
     setExperiencesExigees({
       Débutant: false,
       Junior: false,
       Confirmé: false,
       Expert: false,
-      Senior: false
+      Senior: false,
     });
   };
 
   const handleApplyFilters = () => {
     setDropdownOpen(false);
-   
   };
 
   return (
@@ -95,7 +79,8 @@ function DropdownFilter({ align }) {
       >
         <span className="sr-only">Filter</span>
         <wbr />
-        <svg className="w-4 h-4 fill-current" viewBox="0 0 16 16">
+        <svg className="w-4 h-4 fill-current" viewBox="0 0 16
+        16">
           <path d="M9 15H7a1 1 0 010-2h2a1 1 0 010 2zM11 11H5a1 1 0 010-2h6a1 1 0 010 2zM13 7H3a1 1 0 010-2h10a1 1 0 010 2zM15 3H1a1 1 0 010-2h14a1 1 0 010 2z" />
         </svg>
       </button>
@@ -116,7 +101,6 @@ function DropdownFilter({ align }) {
           <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">Filters</div>
           <div className="flex">
             <ul className="flex-1 mb-4">
-             
               <li className="py-1 px-3">
                 <label className="flex items-center">
                   <span className="text-sm font-medium ml-2">Types de contrats</span>
@@ -137,7 +121,6 @@ function DropdownFilter({ align }) {
                   ))}
                 </ul>
               </li>
-         
               <li className="py-1 px-3">
                 <label className="flex items-center">
                   <span className="text-sm font-medium ml-2">Rythmes de travail</span>
@@ -160,7 +143,6 @@ function DropdownFilter({ align }) {
               </li>
             </ul>
             <ul className="flex-1 mb-4 ml-4">
-             
               <li className="py-1 px-3">
                 <label className="flex items-center">
                   <span className="text-sm font-medium ml-2">Date de publication</span>
@@ -181,7 +163,6 @@ function DropdownFilter({ align }) {
                   ))}
                 </ul>
               </li>
-             
               <li className="py-1 px-3">
                 <label className="flex items-center">
                   <span className="text-sm font-medium ml-2">Expériences exigées</span>
@@ -231,5 +212,6 @@ function DropdownFilter({ align }) {
 }
 
 export default DropdownFilter;
+
 
 

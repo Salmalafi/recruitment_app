@@ -43,7 +43,6 @@ const EditOfferForm = ({ offerData }) => {
         });
       } catch (error) {
         console.error('Error fetching offer:', error);
-        // Handle error (e.g., show error message)
       }
     };
 
@@ -85,19 +84,6 @@ const EditOfferForm = ({ offerData }) => {
       console.log('Offer updated:', response.data);
       setShowSuccessAlert(true);
 
-      // Optionally reset form data after successful submission
-      // setFormData({
-      //   reference: '',
-      //   title: '',
-      //   contractType: '',
-      //   location: '',
-      //   maxDate: '',
-      //   jobDescription: '',
-      //   profilCherche: '',
-      //   whatWeOffer: '',
-      //   experience: '',
-      //   skillsRequired: [],
-      // });
     } catch (error) {
       console.error('Error:', error);
       setShowErrorAlert(true);
@@ -118,7 +104,7 @@ const EditOfferForm = ({ offerData }) => {
 
   return (
     <div className="mt-6 max-w-6xl max-lg:max-w-3xl mx-auto bg-customBlue rounded-lg shadow-lg p-6">
-      {/* Success Alert */}
+    
       {showSuccessAlert && (
         <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-md">
           Offer updated successfully!
@@ -131,7 +117,6 @@ const EditOfferForm = ({ offerData }) => {
         </div>
       )}
 
-      {/* Error Alert */}
       {showErrorAlert && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
           Error updating offer. Please try again later.
@@ -151,9 +136,9 @@ const EditOfferForm = ({ offerData }) => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column */}
+      
           <div className="space-y-6">
-            {/* Title */}
+           
             <div>
               <label htmlFor="title" className="block text-sm font-medium text-gray-600">
                 Title
@@ -169,7 +154,6 @@ const EditOfferForm = ({ offerData }) => {
               />
             </div>
 
-            {/* Reference */}
             <div>
               <label htmlFor="reference" className="block text-sm font-medium text-gray-600">
                 Reference
@@ -185,7 +169,6 @@ const EditOfferForm = ({ offerData }) => {
               />
             </div>
 
-            {/* Contract Type */}
             <div>
               <label htmlFor="contractType" className="block text-sm font-medium text-gray-600">
                 Contract Type
@@ -207,7 +190,6 @@ const EditOfferForm = ({ offerData }) => {
               </select>
             </div>
 
-            {/* Location */}
             <div>
               <label htmlFor="location" className="block text-sm font-medium text-gray-600">
                 Location
@@ -229,7 +211,6 @@ const EditOfferForm = ({ offerData }) => {
               </select>
             </div>
 
-            {/* Max Date */}
             <div>
               <label htmlFor="maxDate" className="block text-sm font-medium text-gray-600">
                 Max Date
@@ -246,9 +227,8 @@ const EditOfferForm = ({ offerData }) => {
             </div>
           </div>
 
-          {/* Right Column */}
           <div className="space-y-6">
-            {/* Job Description */}
+           
             <div>
               <label htmlFor="jobDescription" className="block text-sm font-medium text-gray-600">
                 Job Description
@@ -264,7 +244,6 @@ const EditOfferForm = ({ offerData }) => {
               ></textarea>
             </div>
 
-            {/* Profile Sought */}
             <div>
               <label htmlFor="profilCherche" className="block text-sm font-medium text-gray-600">
                 Profile Sought
@@ -280,7 +259,6 @@ const EditOfferForm = ({ offerData }) => {
               ></textarea>
             </div>
 
-            {/* What We Offer */}
             <div>
               <label htmlFor="whatWeOffer" className="block text-sm font-medium text-gray-600">
                 What We Offer
@@ -295,8 +273,6 @@ const EditOfferForm = ({ offerData }) => {
                 required
               ></textarea>
             </div>
-
-            {/* Experience */}
             <div>
               <label htmlFor="experience" className="block text-sm font-medium text-gray-600">
                 Experience
@@ -317,8 +293,6 @@ const EditOfferForm = ({ offerData }) => {
                 <option value="senior">Senior</option>
               </select>
             </div>
-
-            {/* Skills Required */}
             <div>
               <label htmlFor="skillsRequired" className="block text-sm  font-medium text-gray-600">
                 Skills Required
@@ -357,8 +331,6 @@ const EditOfferForm = ({ offerData }) => {
             </div>
           </div>
         </div>
-
-        {/* Submit Button */}
         <div className="flex justify-center">
           <button
             type="submit"

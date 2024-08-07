@@ -1,30 +1,30 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useThemeProvider } from '../utils/ThemeContext';
-
 import { chartColors } from './ChartjsConfig';
 import {
   Chart, LineController, LineElement, Filler, PointElement, LinearScale, TimeScale, Tooltip,
 } from 'chart.js';
 import 'chartjs-adapter-moment';
-
-// Import utilities
-import { tailwindConfig } from '../utils/Utils';
+import { tailwindConfig, formatValue } from '../utils/Utils';
 
 Chart.register(LineController, LineElement, Filler, PointElement, LinearScale, TimeScale, Tooltip);
 
-function RealtimeChart({ data, width, height }) {
+function RealtimeChart({
+  data,
+  width,
+  height
+}) {
   const [chart, setChart] = useState(null);
-  const canvasRef = useRef(null);
-  const chartValueRef = useRef(null);
-  const chartDeviationRef = useRef(null);
+  const canvas = useRef(null);
+  const chartValue = useRef(null);
+  const chartDeviation = useRef(null);
   const { currentTheme } = useThemeProvider();
-  const darkMode = currentTheme === 'dark';
+  const darkMode = currentTheme === 'dark';  
   const { textColor, gridColor, tooltipTitleColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors;
 
   useEffect(() => {
-    if (!canvasRef.current) return;
-
-    const ctx = canvasRef.current;
+    const ctx = canvas.current;
+    // eslint-disable-next-line no-unused-vars
     const newChart = new Chart(ctx, {
       type: 'line',
       data: data,
@@ -38,8 +38,10 @@ function RealtimeChart({ data, width, height }) {
               display: false,
             },
             suggestedMin: 0,
+            suggestedMax: Math.max(...data.datasets[0].data) + 5, 
             ticks: {
               maxTicksLimit: 5,
+              callback: (value) => value,
               color: darkMode ? textColor.dark : textColor.light,
             },
             grid: {
@@ -49,6 +51,7 @@ function RealtimeChart({ data, width, height }) {
           x: {
             type: 'time',
             time: {
+              parser: 'YYYY-MM-DD',
               unit: 'day',
               tooltipFormat: 'MMM DD, YYYY',
               displayFormats: {
@@ -95,22 +98,20 @@ function RealtimeChart({ data, width, height }) {
     });
     setChart(newChart);
     return () => newChart.destroy();
-  }, [data, darkMode]);
-
-  useEffect(() => {
-    if (!chart) return;
-
-    const currentValue = data.datasets[0].data[data.datasets[0].data.length - 1];
-    const previousValue = data.datasets[0].data[data.datasets[0].data.length - 2];
-    const diff = ((currentValue - previousValue) / previousValue) * 100;
-    chartValueRef.current.innerHTML = currentValue;
-    chartDeviationRef.current.innerHTML = `${diff > 0 ? '+' : ''}${diff.toFixed(2)}%`;
-    chartDeviationRef.current.style.backgroundColor = diff < 0 ? tailwindConfig().theme.colors.red[500] : tailwindConfig().theme.colors.green[500];
   }, [data]);
 
   useEffect(() => {
     if (!chart) return;
+    const currentValue = data.datasets[0].data[data.datasets[0].data.length - 1];
+    const previousValue = data.datasets[0].data[data.datasets[0].data.length - 2];
+    const diff = ((currentValue - previousValue) / previousValue) * 100;
+    chartValue.current.innerHTML = currentValue;
+    chartDeviation.current.style.backgroundColor = diff < 0 ? tailwindConfig().theme.colors.amber[500] : tailwindConfig().theme.colors.emerald[500];
+    chartDeviation.current.innerHTML = `${diff > 0 ? '+' : ''}${diff.toFixed(2)}%`;
+  }, [data]);
 
+  useEffect(() => {
+    if (!chart) return;
     if (darkMode) {
       chart.options.scales.x.ticks.color = textColor.dark;
       chart.options.scales.y.ticks.color = textColor.dark;
@@ -118,7 +119,7 @@ function RealtimeChart({ data, width, height }) {
       chart.options.plugins.tooltip.titleColor = tooltipTitleColor.dark;
       chart.options.plugins.tooltip.bodyColor = tooltipBodyColor.dark;
       chart.options.plugins.tooltip.backgroundColor = tooltipBgColor.dark;
-      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.dark;
+      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.dark;      
     } else {
       chart.options.scales.x.ticks.color = textColor.light;
       chart.options.scales.y.ticks.color = textColor.light;
@@ -126,7 +127,7 @@ function RealtimeChart({ data, width, height }) {
       chart.options.plugins.tooltip.titleColor = tooltipTitleColor.light;
       chart.options.plugins.tooltip.bodyColor = tooltipBodyColor.light;
       chart.options.plugins.tooltip.backgroundColor = tooltipBgColor.light;
-      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.light;
+      chart.options.plugins.tooltip.borderColor = tooltipBorderColor.light; 
     }
     chart.update('none');
   }, [currentTheme]);
@@ -135,19 +136,16 @@ function RealtimeChart({ data, width, height }) {
     <React.Fragment>
       <div className="px-5 py-3">
         <div className="flex items-start">
-          <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mr-2 tabular-nums">
-            <span ref={chartValueRef}>0</span>
-          </div>
-          <div ref={chartDeviationRef} className="text-sm font-semibold text-white px-1.5 rounded-full"></div>
+          <div className="text-3xl font-bold  text-slate-800 dark:text-slate-100 mr-2 tabular-nums"><span ref={chartValue}>0</span></div>
+          <div ref={chartDeviation} className="text-sm font-semibold text-white px-1.5 rounded-full"></div>
         </div>
       </div>
       <div className="grow">
-        <canvas ref={canvasRef} width={width} height={height}></canvas>
+        <canvas ref={canvas} width={width} height={height}></canvas>
       </div>
     </React.Fragment>
   );
 }
 
 export default RealtimeChart;
-
 
